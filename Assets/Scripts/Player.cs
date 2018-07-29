@@ -14,9 +14,11 @@ public class Player : MonoBehaviour
     public float stabSpeed;
     public int swordvertex;
     public int shieldvertex;
+    public float shieldSpeed;
     float horizspeed;
     float horizaxis;
     float vertaxis;
+    float currentShieldHeight;
     float facing;
     Rigidbody rb;
     Rigidbody shieldrb;
@@ -52,6 +54,7 @@ public class Player : MonoBehaviour
 
     private void LateUpdate()
     {
+        // Set vertex positions to be attached to hilt of sword and centre of shield.
         bodyverts[swordvertex] = sword.transform.localPosition - .43f * sword.transform.up;
         if (facing<0) {
             bodyverts[swordvertex][0] += .86f * sword.transform.up[0];
@@ -62,12 +65,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // inputs
         horizaxis = Input.GetAxisRaw("Horizontal") * acceleration * Time.deltaTime;
         vertaxis = Input.GetAxisRaw("Vertical");
         if (Mathf.Abs(horizaxis) > 0)
         {
             if (!attacking)
             {
+                // change facing, but only if not mid-attack
                 if (horizaxis > 0)
                 {
                     facing = 1;
@@ -79,6 +84,7 @@ public class Player : MonoBehaviour
                     rb.MoveRotation(Quaternion.LookRotation(Vector3.back));
                 }
             }
+            // Accelerate!
             horizspeed += horizaxis;//Input.GetAxis("Horizontal") * acceleration * Time.deltaTime;
 
             if (horizspeed > maxspeed) { horizspeed = maxspeed; }
@@ -86,6 +92,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            // No input, slow down!
             if (Mathf.Abs(horizspeed) < (acceleration * Time.deltaTime))
             {
                 horizspeed = 0f;
@@ -95,42 +102,60 @@ public class Player : MonoBehaviour
                 horizspeed -= acceleration * Time.deltaTime * Mathf.Sign(horizspeed);
             }
         }
+        // Movement using above horizspeed.
         rb.MovePosition(rb.position + Vector3.right * horizspeed);
 
+        // Move shield based on vertical axis, but only if not attacking
         if (!attacking)
         {
+            // Move shield smoothly
+            if (Mathf.Abs(vertaxis-currentShieldHeight) > shieldSpeed*Time.deltaTime)
+            {
+                currentShieldHeight += shieldSpeed *
+                    Time.deltaTime * Mathf.Sign(vertaxis - currentShieldHeight);
+            }
+            else {
+                currentShieldHeight = vertaxis;
+            }
+            // Set shield height here
             shieldrb.MovePosition(rb.position + 0.5f * facing * Vector3.right +
-                                  Vector3.up * (vertaxis / 2f));
+                                  Vector3.up * (currentShieldHeight/2f));
         }
 
+        // If not jumping already, do a jump!
         if (jumping == false && Input.GetButtonDown("Jump"))
         {
             rb.AddForce(Vector3.up * maxJumpSpeed, ForceMode.VelocityChange);
             jumping = true;
         }
 
-
+        // Slow down jump on release. Allows variable jump height.
         if (Input.GetButtonUp("Jump") && rb.velocity[1] > minJumpSpeed)
         {
             rb.AddForce(Vector3.down * (rb.velocity[1] - minJumpSpeed), ForceMode.VelocityChange);
         }
 
+        // Attack!
         if (!attacking && Input.GetButtonDown("Fire1"))
         {
 
-            StartCoroutine(Stab(vertaxis));
+            StartCoroutine(Stab(currentShieldHeight));
         }
 
     }
 
-
+    // Stab animation
     IEnumerator Stab (float stabheight) {
+        swordbox.enabled = true; // turn on swordbox to do damage
         attacking = true;
+        // point forward and get ready to stab!
         swordrb.MoveRotation(Quaternion.Euler(0,0,-90*facing));
         swordrb.MovePosition(rb.position + transform.up * stabheight / 2f);
-        //float stabdist=0f;
+        
         float timepassed=0f;
         yield return null;
+
+        // Move sword out
         while (timepassed<Mathf.Abs(stabTime)) {
             timepassed += Time.deltaTime;
             swordrb.MovePosition(rb.position + transform.up * stabheight / 2f
@@ -138,6 +163,8 @@ public class Player : MonoBehaviour
             yield return null;
         }
         timepassed = 0f;
+
+        // Move sword back in
         while (timepassed < Mathf.Abs(stabTime))
         {
             timepassed += Time.deltaTime;
@@ -145,13 +172,20 @@ public class Player : MonoBehaviour
                                  + sword.transform.up * (stabTime-timepassed) * stabSpeed);
             yield return null;
         }
+
+        // Return to rest position.
         swordrb.MovePosition(rb.position + swordpos
                              + ((facing<0) ? (-2f*swordpos[0]*Vector3.right) : (Vector3.zero)));
         swordrb.MoveRotation(rb.rotation*swordangle);
         yield return null;
+
+        // No longer attacking
         attacking = false;
+        swordbox.enabled = false;
     }
 
+    // No jumping on collision.
+    // Doubles for allowing walljumps in the future? Maybe?
     private void OnCollisionEnter(Collision collision)
     {
         jumping = false;
