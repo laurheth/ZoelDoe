@@ -16,11 +16,13 @@ public class Player : MonoBehaviour
     public int shieldvertex;
     public float shieldSpeed;
     public float terminalVelocity;
+    public int hp;
     float horizspeed;
     float horizaxis;
     float vertaxis;
     float currentShieldHeight;
     float facing;
+    bool dead;
     Rigidbody rb;
     Rigidbody shieldrb;
     Rigidbody swordrb;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        dead = false;
         facing = 1;
         rb = GetComponent<Rigidbody>();
         shieldrb = shield.GetComponent<Rigidbody>();
@@ -73,6 +76,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (dead) {
+            return;
+        }
         // inputs
         horizaxis = Input.GetAxisRaw("Horizontal") * acceleration * Time.deltaTime;
         vertaxis = Input.GetAxisRaw("Vertical");
@@ -199,6 +205,14 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         jumping = false;
+    }
+
+    public void damage(int dmg) {
+        hp -= dmg;
+        if (hp<=0) {
+            dead = true;
+            rb.constraints = RigidbodyConstraints.None;
+        }
     }
 }
 
