@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     public int swordvertex;
     public int shieldvertex;
     public float shieldSpeed;
+    public float terminalVelocity;
     float horizspeed;
     float horizaxis;
     float vertaxis;
@@ -61,6 +62,13 @@ public class Player : MonoBehaviour
         }
         bodyverts[shieldvertex] = shield.transform.localPosition;
         bodyrend.SetPositions(bodyverts);
+    }
+
+    private void FixedUpdate()
+    {
+        if (rb.velocity[1] < -terminalVelocity) { 
+            rb.velocity = new Vector3(rb.velocity[0],-terminalVelocity,rb.velocity[2]);
+        }
     }
 
     void Update()
@@ -143,6 +151,8 @@ public class Player : MonoBehaviour
         }
 
     }
+
+
 
     // Stab animation
     IEnumerator Stab (float stabheight) {
