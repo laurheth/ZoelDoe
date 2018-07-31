@@ -293,23 +293,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LevelToLoad: {fileID: 2800000, guid: 832650e3510ce4085941d07e2437423a, type: 3}
-  colorprefabs:
-  - color: {r: 1, g: 0, b: 1, a: 1}
+  ObjectLegend:
+  - ObjectName: PlayerStart
     prefab: {fileID: 1508730050282512, guid: c1ec060b57bd24306914c4913f786ea2, type: 2}
-    isObject: 1
-  - color: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    prefab: {fileID: 1461411963840772, guid: 74eb700b445a744349cf6d2087255585, type: 2}
-    isObject: 0
-  - color: {r: 1, g: 0, b: 0, a: 1}
-    prefab: {fileID: 1403251987526346, guid: cf00441f5eba947a0a4dcc17cb9cedf3, type: 2}
-    isObject: 1
-  - color: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
-    prefab: {fileID: 1461411963840772, guid: 1b000db70503b4c9f8566cc01e514d4a, type: 2}
-    isObject: 0
-  - color: {r: 1, g: 1, b: 1, a: 1}
+  - ObjectName: Torch
     prefab: {fileID: 1268194922240796, guid: 82f68550cff104906ab11ac2aaa0741e, type: 2}
-    isObject: 1
-  monsters: []
+  - ObjectName: MurderBirb
+    prefab: {fileID: 1403251987526346, guid: cf00441f5eba947a0a4dcc17cb9cedf3, type: 2}
+  - ObjectName: BrickBlock
+    prefab: {fileID: 1461411963840772, guid: 74eb700b445a744349cf6d2087255585, type: 2}
 --- !u!4 &794703524
 Transform:
   m_ObjectHideFlags: 0

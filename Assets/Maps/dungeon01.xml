@@ -1,0 +1,36 @@
+<dungeon>
+
+  <tile>
+    <symbol>@</symbol>
+    <isobject>PlayerStart</isobject>
+  </tile>
+  <tile>
+    <symbol>t</symbol>
+    <isobject>Torch</isobject>
+  </tile>
+  <tile>
+    <symbol>b</symbol>
+    <isobject>MurderBirb</isobject>
+  </tile>
+  <tile>
+    <symbol>#</symbol>
+    <isobject>BrickBlock</isobject>
+  </tile>
+  
+  <screen>
+    <id>0</id>
+    <grid>
+      ##########
+      #........#
+      #........#
+      #........#
+      #........#
+      #t......t#
+      ##......##
+      #........#
+      #.@...b..#
+      ##########
+    </grid>
+  </screen>
+  
+</dungeon>
