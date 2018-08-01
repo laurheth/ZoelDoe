@@ -16,10 +16,13 @@
     <symbol>#</symbol>
     <isobject>BrickBlock</isobject>
   </tile>
+  <tile>
+    <symbol>X</symbol>
+    <isobject>BrickBlockDark</isobject>
+  </tile>
   
-  <screen>
-    <id>0</id>
-    <grid>
+  <screen id="screen0">
+    <grid zpos="0">
       ##########
       #........#
       #........#
@@ -30,6 +33,30 @@
       #........#
       #.@...b..#
       ##########
+    </grid>
+    <grid zpos="2">
+      XXXXXXXXXX
+      XXXXXXXXXX
+      XXXXXXXXXX
+      XXXXXXXXXX
+      XXX.XX.XXX
+      XXX.XX.XXX
+      XXXXXXXXXX
+      XXXXXXXXXX
+      XXXXXXXXXX
+      XXXXXXXXXX
+    </grid>
+    <grid zpos="1">
+      XXXXXXXXXX
+      XXXXXXXXXX
+      XX......XX
+      XX......XX
+      XX......XX
+      XX......XX
+      XX......XX
+      XX......XX
+      XXXXXXXXXX
+      XXXXXXXXXX
     </grid>
   </screen>
   

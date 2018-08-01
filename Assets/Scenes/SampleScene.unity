@@ -211,11 +211,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 282840810}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7e1c2d57282d477592c914ee12fe374, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d99bf9f4f5df4505b26e61d47a1bff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 0, z: -9}
   t: 0.1
+  LevGen: {fileID: 794703522}
 --- !u!20 &282840813
 Camera:
   m_ObjectHideFlags: 0
@@ -292,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65a6e421e95d143ee8e8ad6b7109e3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelToLoad: {fileID: 2800000, guid: 832650e3510ce4085941d07e2437423a, type: 3}
+  LevelToLoad: {fileID: 4900000, guid: 82fa6362a1a684807b7264c008960167, type: 3}
   ObjectLegend:
   - ObjectName: PlayerStart
     prefab: {fileID: 1508730050282512, guid: c1ec060b57bd24306914c4913f786ea2, type: 2}
@@ -302,6 +303,9 @@ MonoBehaviour:
     prefab: {fileID: 1403251987526346, guid: cf00441f5eba947a0a4dcc17cb9cedf3, type: 2}
   - ObjectName: BrickBlock
     prefab: {fileID: 1461411963840772, guid: 74eb700b445a744349cf6d2087255585, type: 2}
+  - ObjectName: BrickBlockDark
+    prefab: {fileID: 1461411963840772, guid: 1b000db70503b4c9f8566cc01e514d4a, type: 2}
+  cam: {fileID: 282840813}
 --- !u!4 &794703524
 Transform:
   m_ObjectHideFlags: 0
