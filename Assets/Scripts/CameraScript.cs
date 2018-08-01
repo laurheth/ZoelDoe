@@ -38,7 +38,7 @@ public class CameraScript : MonoBehaviour {
 
     void CalculateEdges() {
         cam = GetComponent<Camera>();
-        float baseedge = Mathf.Abs(offset[2] * Mathf.Tan(2 * Mathf.PI * cam.fieldOfView / 720));
+        float baseedge = Mathf.Abs(offset[2] * Mathf.Tan(2 * Mathf.PI * cam.fieldOfView / 720));//-0.5f;
         EdgeDist = new Vector2(baseedge * cam.aspect, baseedge);
         Debug.Log(EdgeDist);
     }

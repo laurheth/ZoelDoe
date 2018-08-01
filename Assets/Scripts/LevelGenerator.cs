@@ -6,32 +6,39 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour {
 
     public TextAsset LevelToLoad;
+    public GameObject linkobj;
     public ObjLegend[] ObjectLegend;
     List<ObjLegend> SymbolLegend;
     public Camera cam;
     CameraScript cameraScript;
+    XmlDocument dunxml;
+    XmlNodeList mapnodes;
 	// Use this for initialization
 	void Awake () {
         //defaultbg = new Color(0,0,0,0);
         SymbolLegend = new List<ObjLegend>();
         cameraScript = cam.GetComponent<CameraScript>();
-        GenerateMap(LevelToLoad);
+        LoadDungeon(LevelToLoad);
 	}
 
-    void GenerateMap(TextAsset dungeon, string mapid="screen0") {
-        XmlDocument dunxml = new XmlDocument();
+    void LoadDungeon(TextAsset dungeon) {
+        dunxml = new XmlDocument();
         dunxml.LoadXml(dungeon.text);
         XmlNodeList legendnodes = dunxml.GetElementsByTagName("tile");
         //SymbolLegend = new ObjLegend[legendnodes.Count];
         SymbolLegend.Clear();
-        foreach (XmlNode tiletype in legendnodes) {
+        foreach (XmlNode tiletype in legendnodes)
+        {
             ObjLegend newtile = new ObjLegend();
-            foreach (XmlNode tileelement in tiletype.ChildNodes) {
-                if (tileelement.Name == "symbol") {
+            foreach (XmlNode tileelement in tiletype.ChildNodes)
+            {
+                if (tileelement.Name == "symbol")
+                {
                     newtile.ObjectName = tileelement.InnerText;
                     //Debug.Log(tileelement.InnerText);
                 }
-                else if (tileelement.Name=="isobject") {
+                else if (tileelement.Name == "isobject")
+                {
                     newtile.prefab = SymbolToObject(tileelement.InnerText, ObjectLegend);
                     //Debug.Log(newtile.prefab);
                     //Debug.Log(tileelement.InnerText);
@@ -39,13 +46,17 @@ public class LevelGenerator : MonoBehaviour {
             }
             SymbolLegend.Add(newtile);
         }
+        mapnodes = dunxml.GetElementsByTagName("screen");
+        LoadScreen(mapnodes[0].Attributes["id"].Value);
+    }
 
-        XmlNodeList mapnodes = dunxml.GetElementsByTagName("screen");
+    void LoadScreen(string mapid="screen1") {
+        
         int k;
-        int minx = -100;
-        int maxx = 100;
-        int minz = -100;
-        int maxz = 100;
+        int minx = -200;
+        int maxx = 200;
+        int minz = -200;
+        int maxz = 200;
         //XmlNode mapnode = dunxml.GetElementById("screen0");
         foreach (XmlNode map in mapnodes) {
             if (map.Attributes["id"].Value == mapid) {
@@ -58,12 +69,16 @@ public class LevelGenerator : MonoBehaviour {
                         minz = -grid.Length+1;
                         maxz = 0;
                         minx = 0;
-                        maxx = grid[0].Length;
-
+                        maxx = grid[0].Length-1;
+                        int linknumber;
                         for (int i = 0; i < grid.Length;i++) {
                             Debug.Log(grid[i]);
                             for (int j = 0; j < grid[i].Length;j++) {
                                 if (grid[i].Length-1 > maxx) { maxx = grid[i].Length-1; }
+
+                                if (int.TryParse(grid[i][j].ToString(),out linknumber)) {
+                                    Instantiate(linkobj, new Vector3(j, -i, k), Quaternion.identity, transform);
+                                }
 
                                 GameObject nextobj = SymbolToObject(grid[i][j].ToString(), SymbolLegend.ToArray());
                                 if (nextobj != null) {

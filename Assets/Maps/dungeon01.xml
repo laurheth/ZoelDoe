@@ -1,63 +1,101 @@
 <dungeon>
 
-  <tile>
-    <symbol>@</symbol>
-    <isobject>PlayerStart</isobject>
-  </tile>
-  <tile>
-    <symbol>t</symbol>
-    <isobject>Torch</isobject>
-  </tile>
-  <tile>
-    <symbol>b</symbol>
-    <isobject>MurderBirb</isobject>
-  </tile>
-  <tile>
-    <symbol>#</symbol>
-    <isobject>BrickBlock</isobject>
-  </tile>
-  <tile>
-    <symbol>X</symbol>
-    <isobject>BrickBlockDark</isobject>
-  </tile>
+    <tile>
+        <symbol>@</symbol>
+        <isobject>PlayerStart</isobject>
+    </tile>
+    <tile>
+        <symbol>t</symbol>
+        <isobject>Torch</isobject>
+    </tile>
+    <tile>
+        <symbol>b</symbol>
+        <isobject>MurderBirb</isobject>
+    </tile>
+    <tile>
+        <symbol>#</symbol>
+        <isobject>BrickBlock</isobject>
+    </tile>
+    <tile>
+        <symbol>X</symbol>
+        <isobject>BrickBlockDark</isobject>
+    </tile>
   
-  <screen id="screen0">
-    <grid zpos="0">
-      ##########
-      #........#
-      #........#
-      #........#
-      #........#
-      #t......t#
-      ##......##
-      #........#
-      #.@...b..#
-      ##########
-    </grid>
-    <grid zpos="2">
-      XXXXXXXXXX
-      XXXXXXXXXX
-      XXXXXXXXXX
-      XXXXXXXXXX
-      XXX.XX.XXX
-      XXX.XX.XXX
-      XXXXXXXXXX
-      XXXXXXXXXX
-      XXXXXXXXXX
-      XXXXXXXXXX
-    </grid>
-    <grid zpos="1">
-      XXXXXXXXXX
-      XXXXXXXXXX
-      XX......XX
-      XX......XX
-      XX......XX
-      XX......XX
-      XX......XX
-      XX......XX
-      XXXXXXXXXX
-      XXXXXXXXXX
-    </grid>
-  </screen>
-  
+    <screen id="screen0">
+        <grid zpos="0">
+        ##########
+        #........#
+        #........#
+        #........#
+        #........#
+        #t......t#
+        ##......##
+        #........1
+        #.@@@.b..1
+        ##########
+        </grid>
+        <grid zpos="2">
+        XXXXXXXXXX
+        XXXXXXXXXX
+        XXXXXXXXXX
+        XXXXXXXXXX
+        XXX.XX.XXX
+        XXX.XX.XXX
+        XXXXXXXXXX
+        XXXXXXXXXX
+        XXXXXXXXXX
+        XXXXXXXXXX
+        </grid>
+        <grid zpos="1">
+        XXXXXXXXXX
+        XXXXXXXXXX
+        XX......XX
+        XX......XX
+        XX......XX
+        XX......XX
+        XX......XX
+        XX......XX
+        XXXXXXXXXX
+        XXXXXXXXXX
+        </grid>
+        <exit id="1" target="screen1" />
+    </screen>
+
+    <screen id="screen1">
+        <grid zpos="0">
+            ###########################
+            #.........................#
+            #.........................#
+            #.........................#
+            #.........................#
+            #.........................#
+            1.........................#
+            1..@......................#
+            ###########################
+        </grid>
+        <grid zpos="1">
+            ###########################
+            #.........................#
+            #.........................#
+            #.........................#
+            #.........................#
+            #.........................#
+            #.........................#
+            #..t.........t.........t..#
+            ###########################
+        </grid>
+        <grid zpos="2">
+            XXXXXXXXXXXXXXXXXXXXXXXXXXX
+            XXXXXXXXXXXXXXXXXXXXXXXXXXX
+            XXXXXXXXXXXXXXXX..XXXXXXXXX
+            XXXXXXXXXXXXX....XXXXXXXXXX
+            XXXXXXXXXXXX..XX..XXXXXXXXX
+            XXXXXX.......XXXXXXXXXXXXXX
+            XXXX....XXX...XXXXXXXXXXXXX
+            X....XXXXXXXX..XXXXXXXXXXXX
+            XXXXXXXXXXXXXXXXXXXXXXXXXXX
+        </grid>
+        <exit id="1" target="screen0" />
+    </screen>
+    
 </dungeon>

@@ -37,6 +37,14 @@ public class Player : MonoBehaviour
     bool attacking;
     //Vector3 facing;
     // Use this for initialization
+    private void Awake()
+    {
+        if (GameObject.FindGameObjectsWithTag("Player").Length > 1)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         dead = false;
@@ -54,6 +62,8 @@ public class Player : MonoBehaviour
         bodyverts = new Vector3[bodyrend.positionCount];
         bodyrend.GetPositions(bodyverts);
         //facing = Vector3.right;
+        transform.parent = null;
+
     }
 
     private void LateUpdate()

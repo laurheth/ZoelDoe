@@ -294,6 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LevelToLoad: {fileID: 4900000, guid: 82fa6362a1a684807b7264c008960167, type: 3}
+  linkobj: {fileID: 1307670815165372, guid: 2186659af057e44c2b2feae58a333b85, type: 2}
   ObjectLegend:
   - ObjectName: PlayerStart
     prefab: {fileID: 1508730050282512, guid: c1ec060b57bd24306914c4913f786ea2, type: 2}
