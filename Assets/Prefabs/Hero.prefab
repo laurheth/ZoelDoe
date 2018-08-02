@@ -233,8 +233,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shield: {fileID: 1219728961630508}
   sword: {fileID: 1907515136627506}
-  acceleration: 1
-  maxspeed: 0.1
+  acceleration: 50
+  maxspeed: 5
   minJumpSpeed: 2
   maxJumpSpeed: 10
   stabTime: 0.08

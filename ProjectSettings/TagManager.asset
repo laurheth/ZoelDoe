@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - sword
+  - Linker
   layers:
   - Default
   - TransparentFX

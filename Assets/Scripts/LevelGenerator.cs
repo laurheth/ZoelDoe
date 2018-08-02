@@ -13,11 +13,14 @@ public class LevelGenerator : MonoBehaviour {
     CameraScript cameraScript;
     XmlDocument dunxml;
     XmlNodeList mapnodes;
+    int centerx;
 	// Use this for initialization
 	void Awake () {
+        centerx = 10;
         //defaultbg = new Color(0,0,0,0);
         SymbolLegend = new List<ObjLegend>();
         cameraScript = cam.GetComponent<CameraScript>();
+        cameraScript.SaveOffset();
         LoadDungeon(LevelToLoad);
 	}
 
@@ -48,10 +51,11 @@ public class LevelGenerator : MonoBehaviour {
         }
         mapnodes = dunxml.GetElementsByTagName("screen");
         LoadScreen(mapnodes[0].Attributes["id"].Value);
+        //cameraScript.jumpToPos();
     }
 
     void LoadScreen(string mapid="screen1") {
-        
+        //mapid = "screen1";
         int k;
         int minx = -200;
         int maxx = 200;
@@ -61,6 +65,7 @@ public class LevelGenerator : MonoBehaviour {
         foreach (XmlNode map in mapnodes) {
             if (map.Attributes["id"].Value == mapid) {
                 //Debug.Log(map.InnerXml);
+                List<LinkObject> linklist = new List<LinkObject>();
                 foreach (XmlNode mapdetail in map.ChildNodes) {
                     if (mapdetail.Name=="grid") {
                         k = int.Parse(mapdetail.Attributes["zpos"].Value);
@@ -72,28 +77,64 @@ public class LevelGenerator : MonoBehaviour {
                         maxx = grid[0].Length-1;
                         int linknumber;
                         for (int i = 0; i < grid.Length;i++) {
-                            Debug.Log(grid[i]);
+                            //Debug.Log(grid[i]);
                             for (int j = 0; j < grid[i].Length;j++) {
                                 if (grid[i].Length-1 > maxx) { maxx = grid[i].Length-1; }
-
-                                if (int.TryParse(grid[i][j].ToString(),out linknumber)) {
-                                    Instantiate(linkobj, new Vector3(j, -i, k), Quaternion.identity, transform);
+                                GameObject nextobj;
+                                if (int.TryParse(grid[i][j].ToString(), out linknumber))
+                                {
+                                    nextobj = Instantiate(linkobj, new Vector3(j, -i, k), Quaternion.identity, transform);
+                                    LinkObject newlinkobj = nextobj.GetComponent<LinkObject>();
+                                    newlinkobj.currentScreen = mapid;
+                                    newlinkobj.levelGenerator = this;
+                                    newlinkobj.targetScreen = grid[i][j].ToString();
+                                    //newlinkobj.setdirection()
+                                    linklist.Add(newlinkobj);
                                 }
-
-                                GameObject nextobj = SymbolToObject(grid[i][j].ToString(), SymbolLegend.ToArray());
-                                if (nextobj != null) {
-                                    Instantiate(nextobj, new Vector3(j,-i,k),Quaternion.identity,transform);
+                                else
+                                {
+                                    nextobj = SymbolToObject(grid[i][j].ToString(), SymbolLegend.ToArray());
+                                    if (nextobj != null)
+                                    {
+                                        Instantiate(nextobj, new Vector3(j, -i, k), Quaternion.identity, transform);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
+                foreach (XmlNode mapdetail in map.ChildNodes)
+                {
+                    string exitid;
+                    string exittarget;
+                    if (mapdetail.Name == "exit")
+                    {
+                        exitid = mapdetail.Attributes["id"].Value;
+                        exittarget = mapdetail.Attributes["target"].Value;
+                        foreach (LinkObject newlinkobj in linklist) {
+                            if (newlinkobj.targetScreen == exitid) {
+                                newlinkobj.targetScreen = exittarget;
+                                newlinkobj.SetDirection(mapdetail.Attributes["direction"].Value);
+                            }
+                        }
+                    }
+                }
+                centerx = (maxx + minx) / 2;
                 cameraScript.SetBoundaries(minx, maxx, minz, maxz);
 
             }
 
         }
         //Debug.Log(mapnode.InnerXml);
+    }
+
+    public void SwitchScreen(string targetscreen) {
+        foreach (Transform childtrans in transform) {
+            Destroy(childtrans.gameObject);
+        }
+        cameraScript.ResetOffset();
+        LoadScreen(targetscreen);
     }
 
     GameObject SymbolToObject(string Symbol,ObjLegend[] legends) {
@@ -111,6 +152,10 @@ public class LevelGenerator : MonoBehaviour {
         return toreturn;
     }
 
+    public int DirectionToCentre(Vector3 location) {
+        if (location[0] < centerx) { return 1; }
+        else { return -1; }
+    }
     /*
     [System.Serializable]
     public class ColorPrefab {

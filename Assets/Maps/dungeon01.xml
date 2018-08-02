@@ -28,10 +28,10 @@
         #........#
         #........#
         #........#
-        #t......t#
+        #b......t#
         ##......##
         #........1
-        #.@@@.b..1
+        #.@......1
         ##########
         </grid>
         <grid zpos="2">
@@ -58,7 +58,7 @@
         XXXXXXXXXX
         XXXXXXXXXX
         </grid>
-        <exit id="1" target="screen1" />
+        <exit id="1" target="screen1" direction="right"/>
     </screen>
 
     <screen id="screen1">
@@ -95,7 +95,7 @@
             X....XXXXXXXX..XXXXXXXXXXXX
             XXXXXXXXXXXXXXXXXXXXXXXXXXX
         </grid>
-        <exit id="1" target="screen0" />
+        <exit id="1" target="screen0" direction="left" />
     </screen>
     
 </dungeon>

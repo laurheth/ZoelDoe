@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     float currentShieldHeight;
     float facing;
     bool dead;
+    bool nocontrol;
     Rigidbody rb;
     Rigidbody shieldrb;
     Rigidbody swordrb;
@@ -63,14 +64,16 @@ public class Player : MonoBehaviour
         bodyrend.GetPositions(bodyverts);
         //facing = Vector3.right;
         transform.parent = null;
-
+        nocontrol = false;
+        transform.position += Vector3.up * 0.5f;
     }
 
     private void LateUpdate()
     {
         // Set vertex positions to be attached to hilt of sword and centre of shield.
         bodyverts[swordvertex] = sword.transform.localPosition - .43f * sword.transform.up;
-        if (facing<0) {
+        if (facing < 0)
+        {
             bodyverts[swordvertex][0] += .86f * sword.transform.up[0];
         }
         bodyverts[shieldvertex] = shield.transform.localPosition;
@@ -79,14 +82,22 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (rb.velocity[1] < -terminalVelocity) { 
-            rb.velocity = new Vector3(rb.velocity[0],-terminalVelocity,rb.velocity[2]);
+        if (rb.velocity[1] < -terminalVelocity)
+        {
+            rb.velocity = new Vector3(rb.velocity[0], -terminalVelocity, rb.velocity[2]);
+        }
+        // Movement using above horizspeed.
+        if (!nocontrol)
+        {
+            rb.MovePosition(rb.position + Vector3.right * horizspeed * Time.fixedDeltaTime);
         }
     }
 
+
     void Update()
     {
-        if (dead) {
+        if (dead)
+        {
             return;
         }
         // inputs
@@ -126,24 +137,24 @@ public class Player : MonoBehaviour
                 horizspeed -= acceleration * Time.deltaTime * Mathf.Sign(horizspeed);
             }
         }
-        // Movement using above horizspeed.
-        rb.MovePosition(rb.position + Vector3.right * horizspeed);
+
 
         // Move shield based on vertical axis, but only if not attacking
         if (!attacking)
         {
             // Move shield smoothly
-            if (Mathf.Abs(vertaxis-currentShieldHeight) > shieldSpeed*Time.deltaTime)
+            if (Mathf.Abs(vertaxis - currentShieldHeight) > shieldSpeed * Time.deltaTime)
             {
                 currentShieldHeight += shieldSpeed *
                     Time.deltaTime * Mathf.Sign(vertaxis - currentShieldHeight);
             }
-            else {
+            else
+            {
                 currentShieldHeight = vertaxis;
             }
             // Set shield height here
             shieldrb.MovePosition(rb.position + 0.5f * facing * Vector3.right +
-                                  Vector3.up * (currentShieldHeight/2f));
+                                  Vector3.up * (currentShieldHeight / 2f));
         }
 
         // If not jumping already, do a jump!
@@ -171,21 +182,23 @@ public class Player : MonoBehaviour
 
 
     // Stab animation
-    IEnumerator Stab (float stabheight) {
+    IEnumerator Stab(float stabheight)
+    {
         swordbox.enabled = true; // turn on swordbox to do damage
         attacking = true;
         // point forward and get ready to stab!
-        swordrb.MoveRotation(Quaternion.Euler(0,0,-90*facing));
+        swordrb.MoveRotation(Quaternion.Euler(0, 0, -90 * facing));
         swordrb.MovePosition(rb.position + transform.up * stabheight / 2f);
-        
-        float timepassed=0f;
+
+        float timepassed = 0f;
         yield return null;
 
         // Move sword out
-        while (timepassed<Mathf.Abs(stabTime)) {
+        while (timepassed < Mathf.Abs(stabTime))
+        {
             timepassed += Time.deltaTime;
             swordrb.MovePosition(rb.position + transform.up * stabheight / 2f
-                                 + sword.transform.up*timepassed * stabSpeed);
+                                 + sword.transform.up * timepassed * stabSpeed);
             yield return null;
         }
         timepassed = 0f;
@@ -195,14 +208,14 @@ public class Player : MonoBehaviour
         {
             timepassed += Time.deltaTime;
             swordrb.MovePosition(rb.position + transform.up * stabheight / 2f
-                                 + sword.transform.up * (stabTime-timepassed) * stabSpeed);
+                                 + sword.transform.up * (stabTime - timepassed) * stabSpeed);
             yield return null;
         }
 
         // Return to rest position.
         swordrb.MovePosition(rb.position + swordpos
-                             + ((facing<0) ? (-2f*swordpos[0]*Vector3.right) : (Vector3.zero)));
-        swordrb.MoveRotation(rb.rotation*swordangle);
+                             + ((facing < 0) ? (-2f * swordpos[0] * Vector3.right) : (Vector3.zero)));
+        swordrb.MoveRotation(rb.rotation * swordangle);
         yield return null;
 
         // No longer attacking
@@ -217,12 +230,47 @@ public class Player : MonoBehaviour
         jumping = false;
     }
 
-    public void damage(int dmg) {
+    public void damage(int dmg)
+    {
         hp -= dmg;
-        if (hp<=0) {
+        if (hp <= 0)
+        {
             dead = true;
             rb.constraints = RigidbodyConstraints.None;
         }
+    }
+
+    public void MoveOne(Vector3 stepdist)
+    {
+        Debug.Log(stepdist);
+        horizspeed = 0;
+        StartCoroutine(movecoroutine(stepdist));
+    }
+
+    public IEnumerator movecoroutine (Vector3 stepdist) {
+        rb.isKinematic = true;
+        int breaker = 0;
+        nocontrol = true;
+        //rb.MovePosition(rb.position - stepdist);
+        yield return null;
+        stepdist *= 2;
+        //float stepsize=stepdist/
+        while (!(Mathf.Approximately(stepdist.magnitude, 0f)) && breaker < 100)
+        {
+            rb.MovePosition(rb.position + stepdist.normalized * maxspeed * Time.deltaTime);
+            if (Mathf.Abs(stepdist.magnitude) > Mathf.Abs(maxspeed * Time.deltaTime))
+            {
+                stepdist -= stepdist.normalized * maxspeed * Time.deltaTime;
+            }
+            else {
+                stepdist = Vector3.zero;
+            }
+            Debug.Log(stepdist);
+            breaker++;
+            yield return null;
+        }
+        nocontrol = false;
+        rb.isKinematic = false;
     }
 }
 
