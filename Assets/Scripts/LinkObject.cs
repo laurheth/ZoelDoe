@@ -40,6 +40,7 @@ public class LinkObject : MonoBehaviour {
         levelGenerator.SwitchScreen(targetScreen);
         Vector3 movelocation = Vector3.zero;
         int miny = 200;
+        float numentrances = 0f;
         foreach (GameObject linkobj in GameObject.FindGameObjectsWithTag("Linker"))
         {
             if (linkobj.GetComponent<LinkObject>().targetScreen.Equals(currentScreen))

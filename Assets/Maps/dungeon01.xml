@@ -23,7 +23,7 @@
   
     <screen id="screen0">
         <grid zpos="0">
-        ##########
+        ###2222###
         #........#
         #........#
         #........#
@@ -59,6 +59,7 @@
         XXXXXXXXXX
         </grid>
         <exit id="1" target="screen1" direction="right"/>
+        <exit id="2" target="screen2" direction="up" />
     </screen>
 
     <screen id="screen1">
@@ -71,7 +72,7 @@
             #.........................#
             1.........................#
             1..@......................#
-            ###########################
+            ############2222###########
         </grid>
         <grid zpos="1">
             ###########################
@@ -96,6 +97,26 @@
             XXXXXXXXXXXXXXXXXXXXXXXXXXX
         </grid>
         <exit id="1" target="screen0" direction="left" />
+        <exit id="2" target="screen2" direction="down" />
+    </screen>
+
+    <screen id="screen2">
+        <grid zpos="0">
+            #11111#
+            #.....#
+            #.....#
+            #.....#
+            #.....#
+            #.....#
+            #.....#
+            #.....#
+            #.....#
+            #.....#
+            #.....#
+            #22222#
+        </grid>
+        <exit id="1" target="screen1" direction="up"/>
+        <exit id="2" target="screen0" direction="down" />
     </screen>
     
 </dungeon>
