@@ -7,12 +7,14 @@ public class LinkObject : MonoBehaviour {
     public string targetScreen;
     public LevelGenerator levelGenerator;
     public bool active;
+    public int xidnum;
     bool switching;
     public Vector3 stepdirection;
     private void Awake()
     {
         switching = false;
         active = true;
+        xidnum = 0;
     }
 
     private void OnTriggerExit(Collider other)
@@ -40,21 +42,29 @@ public class LinkObject : MonoBehaviour {
         levelGenerator.SwitchScreen(targetScreen);
         Vector3 movelocation = Vector3.zero;
         int miny = 200;
-        float numentrances = 0f;
+        int rememberx = -1;
+        Debug.Log("this xid" + xidnum);
         foreach (GameObject linkobj in GameObject.FindGameObjectsWithTag("Linker"))
         {
             if (linkobj.GetComponent<LinkObject>().targetScreen.Equals(currentScreen))
             {
                 linkobj.GetComponent<LinkObject>().active = false;
-                if (linkobj.transform.position[1] < miny)
+                if ((int)(linkobj.transform.position[1]) <= miny)
                 {
                     movelocation = linkobj.transform.position;
                     miny = (int)movelocation[1];
+                    Debug.Log("That:" + linkobj.GetComponent<LinkObject>().xidnum);
+                    if (linkobj.GetComponent<LinkObject>().xidnum == xidnum) {
+                        rememberx = (int)movelocation[0];
+                        //Debug.Log("Found: breaking");
+                        //break;
+                    }
                 }
             }
         }
         movelocation[2] = 0f;
         movelocation[1] += 0.5f;
+        if (rememberx > 0) { movelocation[0]=rememberx; }
         movelocation -= stepdirection;
         PlayerObj.transform.position = movelocation;
         PlayerObj.gameObject.GetComponent<Player>().MoveOne(stepdirection);

@@ -265,7 +265,7 @@ public class Player : MonoBehaviour
             else {
                 stepdist = Vector3.zero;
             }
-            Debug.Log(stepdist);
+            //Debug.Log(stepdist);
             breaker++;
             yield return null;
         }

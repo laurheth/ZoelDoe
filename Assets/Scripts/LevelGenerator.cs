@@ -65,6 +65,8 @@ public class LevelGenerator : MonoBehaviour {
         foreach (XmlNode map in mapnodes) {
             if (map.Attributes["id"].Value == mapid) {
                 //Debug.Log(map.InnerXml);
+                List<string> linktargs = new List<string>();
+                List<int> linkxid = new List<int>();
                 List<LinkObject> linklist = new List<LinkObject>();
                 foreach (XmlNode mapdetail in map.ChildNodes) {
                     if (mapdetail.Name=="grid") {
@@ -90,6 +92,15 @@ public class LevelGenerator : MonoBehaviour {
                                     newlinkobj.targetScreen = grid[i][j].ToString();
                                     //newlinkobj.setdirection()
                                     linklist.Add(newlinkobj);
+                                    if (linktargs.Contains(grid[i][j].ToString())) {
+                                        newlinkobj.xidnum = linkxid[linktargs.IndexOf(grid[i][j].ToString())]+1;
+                                        linkxid[linktargs.IndexOf(grid[i][j].ToString())]++;
+                                    }
+                                    else {
+                                        linktargs.Add(grid[i][j].ToString());
+                                        linkxid.Add(0);
+                                        newlinkobj.xidnum = 0;
+                                    }
                                 }
                                 else
                                 {
@@ -120,6 +131,7 @@ public class LevelGenerator : MonoBehaviour {
                         }
                     }
                 }
+
                 centerx = (maxx + minx) / 2;
                 cameraScript.SetBoundaries(minx, maxx, minz, maxz);
 
