@@ -6,6 +6,8 @@ TagManager:
   tags:
   - sword
   - Linker
+  - Item
+  - Monster
   layers:
   - Default
   - TransparentFX

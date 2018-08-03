@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public GameObject shield;
     public GameObject sword;
+    //public GameObject statCanvasObj;
     public float acceleration;
     public float maxspeed;
     public float minJumpSpeed;
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
     public float shieldSpeed;
     public float terminalVelocity;
     public int hp;
+    int numkeys;
     float horizspeed;
     float horizaxis;
     float vertaxis;
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour
     BoxCollider swordbox;
     LineRenderer bodyrend;
     Vector3[] bodyverts;
+    PlayerStatCanvas statCanvas;
 
     bool jumping;
     bool attacking;
@@ -66,6 +69,7 @@ public class Player : MonoBehaviour
         transform.parent = null;
         nocontrol = false;
         transform.position += Vector3.up * 0.5f;
+        //statCanvas = statCanvasObj.GetComponent<PlayerStatCanvas>();
     }
 
     private void LateUpdate()
@@ -233,6 +237,7 @@ public class Player : MonoBehaviour
     public void damage(int dmg)
     {
         hp -= dmg;
+        statCanvas.SetHearts(hp);
         if (hp <= 0)
         {
             dead = true;
@@ -274,6 +279,27 @@ public class Player : MonoBehaviour
         horizspeed = sethorizspeed;
         nocontrol = false;
         rb.isKinematic = false;
+    }
+
+    public void AddStatCanvas(PlayerStatCanvas psc) {
+        statCanvas = psc;
+        statCanvas.SetHearts(hp);
+        statCanvas.SetKeys(numkeys);
+    }
+
+    public void GetKey(int adjust=1) {
+        numkeys += adjust;
+        statCanvas.SetKeys(numkeys);
+    }
+
+    public void GetItem(Item.ItemType itemType, int quantity) {
+        switch (itemType) {
+            case Item.ItemType.Key:
+                GetKey(1);
+                break;
+            default:
+                break;
+        }
     }
 }
 

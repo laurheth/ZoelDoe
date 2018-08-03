@@ -15,6 +15,7 @@ public class MurderBirb : MonoBehaviour {
     public int damage;
     public float awakedistsqr;
     bool awakened;
+    int trackid;
     Rigidbody rb;
 	// Use this for initialization
 	void Start () {
@@ -69,7 +70,12 @@ public class MurderBirb : MonoBehaviour {
     public void Damage(int dmg) {
         hp -= dmg;
         if (hp<=0) {
+            transform.parent.gameObject.GetComponent<LevelGenerator>().UnTrack(trackid);
             Destroy(gameObject);
         }
+    }
+
+    public void SetID(int tid) {
+        trackid = tid;
     }
 }

@@ -11,11 +11,14 @@ public class LevelGenerator : MonoBehaviour {
     List<ObjLegend> SymbolLegend;
     public Camera cam;
     CameraScript cameraScript;
+    Dictionary<string, List<bool>> ObjLog;
     XmlDocument dunxml;
     XmlNodeList mapnodes;
     int centerx;
+    string currentmapid;
 	// Use this for initialization
 	void Awake () {
+        ObjLog = new Dictionary<string, List<bool>>();
         centerx = 10;
         //defaultbg = new Color(0,0,0,0);
         SymbolLegend = new List<ObjLegend>();
@@ -26,6 +29,7 @@ public class LevelGenerator : MonoBehaviour {
 
     void LoadDungeon(TextAsset dungeon) {
         dunxml = new XmlDocument();
+        bool trackable;
         dunxml.LoadXml(dungeon.text);
         XmlNodeList legendnodes = dunxml.GetElementsByTagName("tile");
         //SymbolLegend = new ObjLegend[legendnodes.Count];
@@ -35,6 +39,7 @@ public class LevelGenerator : MonoBehaviour {
             ObjLegend newtile = new ObjLegend();
             foreach (XmlNode tileelement in tiletype.ChildNodes)
             {
+                trackable = false;
                 if (tileelement.Name == "symbol")
                 {
                     newtile.ObjectName = tileelement.InnerText;
@@ -42,7 +47,8 @@ public class LevelGenerator : MonoBehaviour {
                 }
                 else if (tileelement.Name == "isobject")
                 {
-                    newtile.prefab = SymbolToObject(tileelement.InnerText, ObjectLegend);
+                    newtile.prefab = SymbolToObject(tileelement.InnerText, ObjectLegend, out trackable);
+                    newtile.TrackThis = trackable;
                     //Debug.Log(newtile.prefab);
                     //Debug.Log(tileelement.InnerText);
                 }
@@ -55,6 +61,19 @@ public class LevelGenerator : MonoBehaviour {
     }
 
     void LoadScreen(string mapid="screen1") {
+        currentmapid = mapid;
+        bool trackable;
+        bool firstload;
+        if (ObjLog.ContainsKey(mapid)) {
+            firstload = false;
+        }
+        else {
+            firstload = true;
+            ObjLog.Add(mapid, new List<bool>());
+        }
+
+        List<bool> thislog = ObjLog[mapid];
+        int trackobjid = 0;
         //mapid = "screen1";
         int k;
         int minx = -200;
@@ -104,10 +123,33 @@ public class LevelGenerator : MonoBehaviour {
                                 }
                                 else
                                 {
-                                    nextobj = SymbolToObject(grid[i][j].ToString(), SymbolLegend.ToArray());
+                                    bool addobj = true;
+                                    trackable = false;
+                                    nextobj = SymbolToObject(grid[i][j].ToString(), SymbolLegend.ToArray(),out trackable);
                                     if (nextobj != null)
                                     {
-                                        Instantiate(nextobj, new Vector3(j, -i, k), Quaternion.identity, transform);
+                                        
+                                        if (trackable) {
+                                            if (firstload) {
+                                                thislog.Add(true);
+                                                //trackobjid++;
+                                            }
+                                            else {
+                                                addobj = thislog[trackobjid];
+                                            }
+                                            trackobjid++;
+                                        }
+                                        if (addobj) {
+                                            nextobj = Instantiate(nextobj, new Vector3(j, -i, k), Quaternion.identity, transform);
+                                            if (trackable) {
+                                                if (nextobj.tag=="Monster") {
+                                                    nextobj.GetComponent<MurderBirb>().SetID(trackobjid - 1);
+                                                }
+                                                else if (nextobj.tag=="Item") {
+                                                    nextobj.GetComponent<Item>().SetID(trackobjid - 1);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -149,8 +191,9 @@ public class LevelGenerator : MonoBehaviour {
         LoadScreen(targetscreen);
     }
 
-    GameObject SymbolToObject(string Symbol,ObjLegend[] legends) {
+    GameObject SymbolToObject(string Symbol,ObjLegend[] legends, out bool trackable) {
         GameObject toreturn = null;
+        trackable = false;
         foreach (ObjLegend symLegend in legends)
         {
             //Debug.Log(colorprefab.color);
@@ -159,9 +202,14 @@ public class LevelGenerator : MonoBehaviour {
                 //Instantiate(symLegend.prefab, new Vector3(i, j, k),
                 //            Quaternion.identity, transform);
                 toreturn=symLegend.prefab;
+                trackable = symLegend.TrackThis;
             }
         }
         return toreturn;
+    }
+
+    public void UnTrack(int tid) {
+        ObjLog[currentmapid][tid] = false;
     }
 
     public int DirectionToCentre(Vector3 location) {
@@ -180,6 +228,15 @@ public class LevelGenerator : MonoBehaviour {
     public class ObjLegend {
         public string ObjectName;
         public GameObject prefab;
+        public bool TrackThis;
     }
 	
+    /*public class ObjectLog
+    {
+        public string MapID;
+        public List<bool> ObjectExists;
+        public ObjectLog() {
+            ObjectExists = new List<bool>();
+        }
+    }*/
 }

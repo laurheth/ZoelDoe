@@ -9,6 +9,14 @@
         <isobject>Torch</isobject>
     </tile>
     <tile>
+        <symbol>K</symbol>
+        <isobject>Key</isobject>
+    </tile>
+    <!--<tile>
+        <symbol>L</symbol>
+        <isobject>LockedDoor</isobject>
+    </tile>  -->  
+    <tile>
         <symbol>b</symbol>
         <isobject>MurderBirb</isobject>
     </tile>
@@ -31,7 +39,7 @@
         #b......t#
         ##......##
         #........1
-        #.@......1
+        #.@..K...1
         ##########
         </grid>
         <grid zpos="2">
@@ -71,7 +79,7 @@
             #.........................#
             #.........................#
             1.........................#
-            1..@......................#
+            1..@....b.................#
             ############2222###########
         </grid>
         <grid zpos="1">
