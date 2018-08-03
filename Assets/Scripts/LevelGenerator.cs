@@ -143,7 +143,7 @@ public class LevelGenerator : MonoBehaviour {
                                             nextobj = Instantiate(nextobj, new Vector3(j, -i, k), Quaternion.identity, transform);
                                             if (trackable) {
                                                 if (nextobj.tag=="Monster") {
-                                                    nextobj.GetComponent<MurderBirb>().SetID(trackobjid - 1);
+                                                    nextobj.GetComponent<Monster>().SetID(trackobjid - 1);
                                                 }
                                                 else if (nextobj.tag=="Item") {
                                                     nextobj.GetComponent<Item>().SetID(trackobjid - 1);

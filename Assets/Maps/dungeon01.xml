@@ -18,7 +18,7 @@
     </tile>  -->  
     <tile>
         <symbol>b</symbol>
-        <isobject>MurderBirb</isobject>
+        <isobject>Skullbug</isobject>
     </tile>
     <tile>
         <symbol>#</symbol>
@@ -36,7 +36,7 @@
         #........#
         #........#
         #........#
-        #b......t#
+        #.......t#
         ##......##
         #........1
         #.@..K...1
