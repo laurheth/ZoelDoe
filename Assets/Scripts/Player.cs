@@ -240,27 +240,29 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void MoveOne(Vector3 stepdist)
+    public void MoveOne(Vector3 stepdist,bool justfall=false)
     {
         Debug.Log(stepdist);
         horizspeed = 0;
-        StartCoroutine(movecoroutine(stepdist));
+        StartCoroutine(movecoroutine(stepdist,justfall));
     }
 
-    public IEnumerator movecoroutine (Vector3 stepdist) {
+    public IEnumerator movecoroutine (Vector3 stepdist,bool justfall=false,float multiplier=2f) {
         rb.isKinematic = true;
         int breaker = 0;
         nocontrol = true;
         //rb.MovePosition(rb.position - stepdist);
+        float linkspeed = (justfall ? terminalVelocity : maxspeed);
+        float sethorizspeed=maxspeed * (stepdist[0]);
         yield return null;
-        stepdist *= 2;
+        stepdist *= multiplier;
         //float stepsize=stepdist/
         while (!(Mathf.Approximately(stepdist.magnitude, 0f)) && breaker < 100)
         {
-            rb.MovePosition(rb.position + stepdist.normalized * maxspeed * Time.deltaTime);
-            if (Mathf.Abs(stepdist.magnitude) > Mathf.Abs(maxspeed * Time.deltaTime))
+            rb.MovePosition(rb.position + stepdist.normalized * linkspeed * Time.deltaTime);
+            if (Mathf.Abs(stepdist.magnitude) > Mathf.Abs(linkspeed * Time.deltaTime))
             {
-                stepdist -= stepdist.normalized * maxspeed * Time.deltaTime;
+                stepdist -= stepdist.normalized * linkspeed * Time.deltaTime;
             }
             else {
                 stepdist = Vector3.zero;
@@ -269,6 +271,7 @@ public class Player : MonoBehaviour
             breaker++;
             yield return null;
         }
+        horizspeed = sethorizspeed;
         nocontrol = false;
         rb.isKinematic = false;
     }

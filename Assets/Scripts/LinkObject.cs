@@ -37,8 +37,16 @@ public class LinkObject : MonoBehaviour {
     }
 
     IEnumerator Switching() {
+        bool justfall = false;
         GameObject PlayerObj = GameObject.FindGameObjectWithTag("Player");
-        yield return PlayerObj.GetComponent<Player>().movecoroutine(stepdirection);
+        if (Mathf.Approximately((stepdirection - Vector3.down).magnitude, 0f))
+        {
+            justfall = true;
+            //yield return new WaitForSeconds(0.5f);
+        }
+        //yield return null;
+        yield return PlayerObj.GetComponent<Player>().movecoroutine(stepdirection,justfall,1.5f);
+
         levelGenerator.SwitchScreen(targetScreen);
         Vector3 movelocation = Vector3.zero;
         int miny = 200;
@@ -67,7 +75,7 @@ public class LinkObject : MonoBehaviour {
         if (rememberx > 0) { movelocation[0]=rememberx; }
         movelocation -= stepdirection;
         PlayerObj.transform.position = movelocation;
-        PlayerObj.gameObject.GetComponent<Player>().MoveOne(stepdirection);
+        PlayerObj.gameObject.GetComponent<Player>().MoveOne(stepdirection,justfall);
         FindObjectOfType<Camera>().GetComponent<CameraScript>().jumpToPos();
     }
 
@@ -90,5 +98,6 @@ public class LinkObject : MonoBehaviour {
                 stepdirection = Vector3.zero;
                 break;
         }
+        transform.position += stepdirection;
     }
 }
