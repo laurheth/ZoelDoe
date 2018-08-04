@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster : MonoBehaviour {
-    GameObject playerobj;
+    protected GameObject playerobj;
     Player player;
     Rigidbody playerrb;
     public int hp;
@@ -58,9 +58,13 @@ public class Monster : MonoBehaviour {
     public void Damage(int dmg) {
         hp -= dmg;
         if (hp<=0) {
-            transform.parent.gameObject.GetComponent<LevelGenerator>().UnTrack(trackid);
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    public virtual void Die() {
+        transform.parent.gameObject.GetComponent<LevelGenerator>().UnTrack(trackid);
+        Destroy(gameObject);
     }
 
     public void SetID(int tid) {
