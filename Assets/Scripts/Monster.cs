@@ -13,6 +13,7 @@ public class Monster : MonoBehaviour {
     public float jumpspeed;*/
     //public float acceleration;
     public int damage;
+    public float speed;
     public float awakedistsqr;
     protected bool awakened;
     int trackid;

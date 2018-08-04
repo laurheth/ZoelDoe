@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SkullBug : Monster {
-    public float speed;
+    //public float speed;
     public float bonelength;
     public float t;
     public GameObject skull;
