@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 54930365429219436}
   - component: {fileID: 114475799443553466}
   - component: {fileID: 136750303019639748}
+  - component: {fileID: 114082229258893088}
   m_Layer: 0
   m_Name: SkeletonWarrior
   m_TagString: Untagged
@@ -472,11 +473,27 @@ Rigidbody:
   m_Mass: 30
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
+--- !u!114 &114082229258893088
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1669288832919712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d36d0a7150f74c689db6820937aa0f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 5
+  damage: 1
+  awakedistsqr: 16
+  speed: 2
+  stopdist: 1.4
 --- !u!114 &114475799443553466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -488,10 +505,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3de27d374874347b5788b25023c660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 5
-  damage: 2
-  speed: 2
-  awakedistsqr: 9
   Sword: {fileID: 1248755817429002}
   Shield: {fileID: 1770778121358268}
   LimbIDs:
@@ -520,8 +533,8 @@ MonoBehaviour:
   - LimbID: 11
     LimbObj: {fileID: 1645919773692864}
   speedfraction: 0
-  stepAngle: 60
-  lowerLegAngle: 60
+  stepAngle: 45
+  lowerLegAngle: 30
 --- !u!136 &136750303019639748
 CapsuleCollider:
   m_ObjectHideFlags: 1

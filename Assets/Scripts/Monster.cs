@@ -6,6 +6,8 @@ public class Monster : MonoBehaviour {
     protected GameObject playerobj;
     Player player;
     Rigidbody playerrb;
+    protected Transform playerShield;
+    protected float playerShieldRelHeight;
     public int hp;
     /*public float speed;
     public float flightprob;
@@ -13,7 +15,7 @@ public class Monster : MonoBehaviour {
     public float jumpspeed;*/
     //public float acceleration;
     public int damage;
-    public float speed;
+    //public float speed;
     public float awakedistsqr;
     protected bool awakened;
     int trackid;
@@ -25,6 +27,8 @@ public class Monster : MonoBehaviour {
         playerrb = playerobj.GetComponent<Rigidbody>();
         rb = GetComponent<Rigidbody>();
         awakened = false;
+        playerShield = GameObject.FindGameObjectWithTag("PlayerShield").transform;
+
 	}
 	
 	// Update is called once per frame
@@ -40,6 +44,7 @@ public class Monster : MonoBehaviour {
                 return;
             }
         }
+        playerShieldRelHeight = playerShield.position.y - transform.position.y;
 
 	}
 

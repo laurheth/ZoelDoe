@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SkullBug : Monster {
-    //public float speed;
+    public float speed;
     public float bonelength;
     public float t;
     public GameObject skull;
@@ -58,10 +58,6 @@ public class SkullBug : Monster {
         if (facing*(playerobj.transform.position.x-transform.position.x)<0) {
             facing *= -1;
             transform.rotation *= Quaternion.Euler(0, 180, 0);
-            /*for (int i = 0; i < 4;i++) {
-                Feets[i][0] *= -1; //Quaternion.Euler(0, 180, 0) * Feets[i];
-                Feets[i][2] *= -1;
-            }*/
         }
         if (jumptime > 5f)
         {

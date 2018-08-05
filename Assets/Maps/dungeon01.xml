@@ -21,6 +21,10 @@
         <isobject>Skullbug</isobject>
     </tile>
     <tile>
+        <symbol>S</symbol>
+        <isobject>SkeletonWarrior</isobject>
+    </tile>
+    <tile>
         <symbol>#</symbol>
         <isobject>BrickBlock</isobject>
     </tile>
@@ -79,7 +83,7 @@
             #.........................#
             #.........................#
             1.........................#
-            1..@....b.................#
+            1..@....S.................#
             ############22#############
         </grid>
         <grid zpos="1">

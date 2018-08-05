@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordAndShieldUser : Monster {
+public class SwordAndShieldUser : MonoBehaviour {
     public GameObject Sword;
     public GameObject Shield;
     Quaternion BaseSwordRot;
@@ -17,13 +17,16 @@ public class SwordAndShieldUser : Monster {
     public float lowerLegAngle;
     float TorsoWobble;
     float TorsoBaseline;
+    int facing;
     Quaternion restpos;
     float legLength;
     CapsuleCollider capsuleCollider;
+    float speed;
 
-    public override void Start()
+    public void Awake()
     {
-        base.Start();
+        //base.Start();
+        facing = 1;
         speedfraction = 1f;
         capsuleCollider = GetComponent<CapsuleCollider>();
         BaseSwordRot = Sword.transform.localRotation;
@@ -36,7 +39,17 @@ public class SwordAndShieldUser : Monster {
         TorsoBaseline = LimbDict[Limb.Torso].localPosition.y;
         legLength = LimbDict[Limb.ULegR].localPosition[1] + capsuleCollider.height / 2f;
         TorsoWobble = legLength * (1-Mathf.Cos(stepAngle * Mathf.PI / 360f));
-        stepPeriod = (2 * stepAngle * legLength / speed)*(Mathf.PI/180f);
+        SetSpeed();
+    }
+
+    public void SetSpeed(float newspeed=1f) {
+        speed = newspeed;
+        Debug.Log("Speed: " + speed);
+        stepPeriod = (2 * stepAngle * legLength / speed) * (Mathf.PI / 180f);
+    }
+
+    public void SetSpeedFraction(float currentspeed) {
+        speedfraction = currentspeed / speed;
     }
 
     [System.Serializable]
@@ -45,9 +58,14 @@ public class SwordAndShieldUser : Monster {
         public GameObject LimbObj;
     }
 
-    public override void Update()
+    /*private void FixedUpdate()
     {
-        base.Update();
+        rb.MovePosition(rb.position - transform.right * speed * speedfraction * Time.fixedDeltaTime);
+    }*/
+
+    public void Update()
+    {
+        //base.Update();
         restpos = Quaternion.LookRotation(transform.forward);
         if (!attacking) {
             Sword.transform.localRotation = BaseSwordRot;
@@ -72,6 +90,7 @@ public class SwordAndShieldUser : Monster {
         else
         {
             time += speedfraction * Time.deltaTime;
+            //Debug.Log(lowerLegAngle.ToString()+" "+time.ToString()+" "+stepPeriod.ToString());
             LimbDict[Limb.LLegR].localRotation = Quaternion.Euler(0, 0, lowerLegAngle * Mathf.PingPong(time, stepPeriod) / stepPeriod);
             LimbDict[Limb.ULegR].localRotation = Quaternion.Euler(0, 0, 180 + (stepAngle) * (Mathf.PingPong(time, stepPeriod) / stepPeriod - 0.5f));
 
@@ -81,8 +100,17 @@ public class SwordAndShieldUser : Monster {
             LimbDict[Limb.Torso].localPosition = new Vector3(0, TorsoBaseline - 2f * TorsoWobble * Mathf.PingPong(time - stepPeriod / 2, stepPeriod / 2) / (stepPeriod), 0);
 
         }
-            
+        /*if (facing * (playerobj.transform.position.x - transform.position.x) > 0)
+        {
+            facing *= -1;
+            transform.rotation *= Quaternion.Euler(0, 180, 0);
+
+        } */ 
             //}
+    }
+
+    public void SetShieldHeight(float newheight) {
+        
     }
 
 }
