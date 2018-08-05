@@ -8,6 +8,7 @@ TagManager:
   - Linker
   - Item
   - Monster
+  - PlayerShield
   layers:
   - Default
   - TransparentFX

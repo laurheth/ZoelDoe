@@ -493,6 +493,7 @@ MonoBehaviour:
   damage: 1
   awakedistsqr: 16
   speed: 2
+  shieldT: 4
   stopdist: 1.4
 --- !u!114 &114475799443553466
 MonoBehaviour:
@@ -535,6 +536,7 @@ MonoBehaviour:
   speedfraction: 0
   stepAngle: 45
   lowerLegAngle: 30
+  shieldMovement: 4
 --- !u!136 &136750303019639748
 CapsuleCollider:
   m_ObjectHideFlags: 1

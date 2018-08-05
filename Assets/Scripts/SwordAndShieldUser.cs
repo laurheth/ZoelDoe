@@ -15,6 +15,7 @@ public class SwordAndShieldUser : MonoBehaviour {
     float stepPeriod;
     public float stepAngle;
     public float lowerLegAngle;
+    public float shieldMovement;
     float TorsoWobble;
     float TorsoBaseline;
     int facing;
@@ -22,6 +23,10 @@ public class SwordAndShieldUser : MonoBehaviour {
     float legLength;
     CapsuleCollider capsuleCollider;
     float speed;
+    float targetShieldHeight;
+    float currentShieldHeight;
+    Vector3 shieldPosBase;
+    Vector3 shieldPos;
 
     public void Awake()
     {
@@ -40,6 +45,13 @@ public class SwordAndShieldUser : MonoBehaviour {
         legLength = LimbDict[Limb.ULegR].localPosition[1] + capsuleCollider.height / 2f;
         TorsoWobble = legLength * (1-Mathf.Cos(stepAngle * Mathf.PI / 360f));
         SetSpeed();
+        shieldPosBase = Shield.transform.position-transform.position;
+        //SetShieldHeight(shieldPosBase[1]);
+        shieldPosBase[1] = 0;
+        currentShieldHeight = 0.8f;
+        SetShieldHeight(currentShieldHeight);
+        //shieldPos=transform.position + shieldPosBase;
+        //Shield.transform.position = transform.position+shieldPosBase;
     }
 
     public void SetSpeed(float newspeed=1f) {
@@ -100,6 +112,7 @@ public class SwordAndShieldUser : MonoBehaviour {
             LimbDict[Limb.Torso].localPosition = new Vector3(0, TorsoBaseline - 2f * TorsoWobble * Mathf.PingPong(time - stepPeriod / 2, stepPeriod / 2) / (stepPeriod), 0);
 
         }
+        ShieldHeightMove();
         /*if (facing * (playerobj.transform.position.x - transform.position.x) > 0)
         {
             facing *= -1;
@@ -109,8 +122,17 @@ public class SwordAndShieldUser : MonoBehaviour {
             //}
     }
 
+    void ShieldHeightMove() {
+        currentShieldHeight = Mathf.Lerp(currentShieldHeight, targetShieldHeight, shieldMovement * Time.deltaTime);
+        shieldPos = shieldPosBase + transform.up * currentShieldHeight;
+        shieldPos[0] *= transform.right[0];
+        shieldPos += transform.position;
+        Shield.transform.position = shieldPos;
+    }
+
     public void SetShieldHeight(float newheight) {
-        
+        targetShieldHeight = newheight;
+        //transform.position+shieldPosBase + transform.up * newheight;
     }
 
 }

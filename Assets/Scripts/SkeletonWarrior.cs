@@ -9,7 +9,7 @@ public class SkeletonWarrior : Monster {
     bool advancing;
     float playerdist;
     public float shieldT;
-    float shieldHeight;
+    //float shieldHeight;
 
     public float stopdist;
 	// Use this for initialization
@@ -55,9 +55,9 @@ public class SkeletonWarrior : Monster {
                 advancing = true;
             }
             //playerShieldRelHeight
-            shieldHeight = Mathf.Lerp(shieldHeight,
-                                    Mathf.Clamp(playerShieldRelHeight, -1, 1), shieldT);
-            limbScript.SetShieldHeight(shieldHeight);
+            /*shieldHeight = Mathf.Lerp(shieldHeight,
+                                    Mathf.Clamp(playerShieldRelHeight, 0, 1), shieldT*Time.deltaTime);*/
+            limbScript.SetShieldHeight(Mathf.Clamp(playerShieldRelHeight, 0, 1));
 
         }
     }
