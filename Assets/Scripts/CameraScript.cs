@@ -56,13 +56,13 @@ public class CameraScript : MonoBehaviour {
         cam = GetComponent<Camera>();
         float baseedge = Mathf.Abs(offset[2] * Mathf.Tan(2 * Mathf.PI * cam.fieldOfView / 720));//-0.5f;
         EdgeDist = new Vector2(baseedge * cam.aspect, baseedge);
-        Debug.Log(EdgeDist);
+        //Debug.Log(EdgeDist);
     }
 
     public void ResetOffset() {
-        Debug.Log(defaultoffset);
+        //Debug.Log(defaultoffset);
         offset = defaultoffset + Vector3.zero;
-        Debug.Log(offset);
+        //Debug.Log(offset);
     }
 
     public void SetBoundaries(int minx, int maxx, int minz, int maxz) {

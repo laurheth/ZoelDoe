@@ -8,6 +8,8 @@ public class SkeletonWarrior : Monster {
     int facing;
     bool advancing;
     float playerdist;
+    public float maxStabInterval;
+    float stabtime;
     public float shieldT;
     //float shieldHeight;
 
@@ -15,6 +17,7 @@ public class SkeletonWarrior : Monster {
 	// Use this for initialization
 	public override void Start () {
         base.Start();
+        stabtime = Random.Range(0, maxStabInterval);
         limbScript = GetComponent<SwordAndShieldUser>();
         limbScript.SetSpeed(speed);
         limbScript.SetSpeedFraction(0f);
@@ -42,12 +45,20 @@ public class SkeletonWarrior : Monster {
                 transform.rotation *= Quaternion.Euler(0, 180, 0);
             }
 
+            if (Mathf.Abs(playerdist) < 2*stopdist)
+            {
+                stabtime += Time.deltaTime;
+                if (stabtime > maxStabInterval) {
+                    limbScript.Stab(Random.Range(0.1f, 0.9f));
+                    stabtime -= Random.Range(maxStabInterval / 2f, maxStabInterval);
+                }
+
+
+            }
             if (Mathf.Abs(playerdist) < stopdist)
             {
-
-                    limbScript.SetSpeedFraction(0f);
-                    advancing = false;
-
+                limbScript.SetSpeedFraction(0f);
+                advancing = false;
             }
             else 
             {

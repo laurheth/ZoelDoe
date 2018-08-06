@@ -5,6 +5,8 @@ using UnityEngine;
 public class SwordAndShieldUser : MonoBehaviour {
     public GameObject Sword;
     public GameObject Shield;
+    Collider swordbox;
+    Rigidbody swordrb;
     Quaternion BaseSwordRot;
     public enum Limb { UArmL, LArmL, UArmR, LArmR, ULegL, ULegR, LLegL, LLegR, BootL, BootR, Head, Torso };
     public LimbIdent[] LimbIDs;
@@ -18,6 +20,8 @@ public class SwordAndShieldUser : MonoBehaviour {
     public float shieldMovement;
     float TorsoWobble;
     float TorsoBaseline;
+    public float stabTime;
+    public float stabSpeed;
     int facing;
     Quaternion restpos;
     float legLength;
@@ -27,6 +31,7 @@ public class SwordAndShieldUser : MonoBehaviour {
     float currentShieldHeight;
     Vector3 shieldPosBase;
     Vector3 shieldPos;
+    Vector3 swordPosBase;
 
     public void Awake()
     {
@@ -35,6 +40,9 @@ public class SwordAndShieldUser : MonoBehaviour {
         speedfraction = 1f;
         capsuleCollider = GetComponent<CapsuleCollider>();
         BaseSwordRot = Sword.transform.localRotation;
+        swordPosBase = Sword.transform.localPosition;
+        swordbox = Sword.GetComponent<Collider>();
+        swordrb = Sword.GetComponent<Rigidbody>();
         attacking = false;
         LimbDict = new Dictionary<Limb, Transform>();
         for (int i = 0; i < LimbIDs.Length;i++) {
@@ -56,7 +64,7 @@ public class SwordAndShieldUser : MonoBehaviour {
 
     public void SetSpeed(float newspeed=1f) {
         speed = newspeed;
-        Debug.Log("Speed: " + speed);
+        //Debug.Log("Speed: " + speed);
         stepPeriod = (2 * stepAngle * legLength / speed) * (Mathf.PI / 180f);
     }
 
@@ -133,6 +141,53 @@ public class SwordAndShieldUser : MonoBehaviour {
     public void SetShieldHeight(float newheight) {
         targetShieldHeight = newheight;
         //transform.position+shieldPosBase + transform.up * newheight;
+    }
+
+    public void Stab (float stabheight) {
+        StartCoroutine(StabCoroutine(stabheight*capsuleCollider.height));
+    }
+
+    // Stab animation
+    IEnumerator StabCoroutine(float stabheight)
+    {
+        Debug.Log("Stabbing: " + stabheight);
+        swordbox.enabled = true; // turn on swordbox to do damage
+        attacking = true;
+        // point forward and get ready to stab!
+        swordrb.MoveRotation(Quaternion.Euler(0, 0, -90 * facing));
+        swordrb.MovePosition(transform.position + transform.up * stabheight);
+
+        float timepassed = 0f;
+        yield return null;
+
+        // Move sword out
+        while (timepassed < Mathf.Abs(stabTime))
+        {
+            timepassed += Time.deltaTime;
+            swordrb.MovePosition(transform.position + transform.up * stabheight
+                                 + Sword.transform.up * timepassed * stabSpeed);
+            yield return null;
+        }
+        timepassed = 0f;
+
+        // Move sword back in
+        while (timepassed < Mathf.Abs(stabTime))
+        {
+            timepassed += Time.deltaTime;
+            swordrb.MovePosition(transform.position + transform.up * stabheight
+                                 + Sword.transform.up * (stabTime - timepassed) * stabSpeed);
+            yield return null;
+        }
+
+        // Return to rest position.
+        swordrb.MovePosition(transform.position + swordPosBase
+                             + ((facing < 0) ? (-2f * swordPosBase[0] * Vector3.right) : (Vector3.zero)));
+        swordrb.MoveRotation(transform.rotation * BaseSwordRot);
+        yield return null;
+
+        // No longer attacking
+        attacking = false;
+        swordbox.enabled = false;
     }
 
 }

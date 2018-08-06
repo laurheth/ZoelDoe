@@ -51,7 +51,7 @@ public class LinkObject : MonoBehaviour {
         Vector3 movelocation = Vector3.zero;
         int miny = 200;
         int rememberx = -1;
-        Debug.Log("this xid" + xidnum);
+        //Debug.Log("this xid" + xidnum);
         foreach (GameObject linkobj in GameObject.FindGameObjectsWithTag("Linker"))
         {
             if (linkobj.GetComponent<LinkObject>().targetScreen.Equals(currentScreen))
@@ -61,7 +61,7 @@ public class LinkObject : MonoBehaviour {
                 {
                     movelocation = linkobj.transform.position;
                     miny = (int)movelocation[1];
-                    Debug.Log("That:" + linkobj.GetComponent<LinkObject>().xidnum);
+                    //Debug.Log("That:" + linkobj.GetComponent<LinkObject>().xidnum);
                     if (linkobj.GetComponent<LinkObject>().xidnum == xidnum) {
                         rememberx = (int)movelocation[0];
                         //Debug.Log("Found: breaking");
