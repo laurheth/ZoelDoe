@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameObject shield;
-    public GameObject sword;
+    //public GameObject shield;
+    //public GameObject sword;
     //public GameObject statCanvasObj;
     public float acceleration;
     public float maxspeed;
     public float minJumpSpeed;
     public float maxJumpSpeed;
-    public float stabTime;
-    public float stabSpeed;
-    public int swordvertex;
-    public int shieldvertex;
+    //public float stabTime;
+    //public float stabSpeed;
+    //public int swordvertex;
+    //public int shieldvertex;
     public float shieldSpeed;
     public float terminalVelocity;
     public int hp;
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     float horizspeed;
     float horizaxis;
     float vertaxis;
-    float currentShieldHeight;
+    public float currentShieldHeight;
     float facing;
     bool dead;
     bool nocontrol;
@@ -33,9 +33,10 @@ public class Player : MonoBehaviour
     Vector3 swordpos;
     Quaternion swordangle;
     BoxCollider swordbox;
-    LineRenderer bodyrend;
+    //LineRenderer bodyrend;
     Vector3[] bodyverts;
     PlayerStatCanvas statCanvas;
+    SwordAndShieldUser limbScript;
 
     bool jumping;
     bool attacking;
@@ -54,25 +55,29 @@ public class Player : MonoBehaviour
         dead = false;
         facing = 1;
         rb = GetComponent<Rigidbody>();
-        shieldrb = shield.GetComponent<Rigidbody>();
-        shieldpos = shieldrb.position - rb.position;
+        //shieldrb = shield.GetComponent<Rigidbody>();
+        //shieldpos = shieldrb.position - rb.position;
 
-        swordpos = sword.transform.localPosition;
-        swordangle = sword.transform.localRotation;
-        swordbox = sword.GetComponent<BoxCollider>();
-        swordbox.enabled = false;
-        swordrb = sword.GetComponent<Rigidbody>();
-        bodyrend = GetComponent<LineRenderer>();
-        bodyverts = new Vector3[bodyrend.positionCount];
-        bodyrend.GetPositions(bodyverts);
+        //swordpos = sword.transform.localPosition;
+        //swordangle = sword.transform.localRotation;
+        //swordbox = sword.GetComponent<BoxCollider>();
+        //swordbox.enabled = false;
+        //swordrb = sword.GetComponent<Rigidbody>();
+        //bodyrend = GetComponent<LineRenderer>();
+        //bodyverts = new Vector3[bodyrend.positionCount];
+        //bodyrend.GetPositions(bodyverts);
         //facing = Vector3.right;
         transform.parent = null;
         nocontrol = false;
-        transform.position += Vector3.up * 0.5f;
+        transform.position += Vector3.up;// * 0.5f;
         //statCanvas = statCanvasObj.GetComponent<PlayerStatCanvas>();
+        limbScript = GetComponent<SwordAndShieldUser>();
+        limbScript.SetSpeed(maxspeed);
+        limbScript.SetSpeedFraction(0f);
+        //limbScript.facing = -1;
     }
 
-    private void LateUpdate()
+    /*private void LateUpdate()
     {
         // Set vertex positions to be attached to hilt of sword and centre of shield.
         bodyverts[swordvertex] = sword.transform.localPosition - .43f * sword.transform.up;
@@ -82,7 +87,7 @@ public class Player : MonoBehaviour
         }
         bodyverts[shieldvertex] = shield.transform.localPosition;
         bodyrend.SetPositions(bodyverts);
-    }
+    }*/
 
     private void FixedUpdate()
     {
@@ -106,7 +111,7 @@ public class Player : MonoBehaviour
         }
         // inputs
         horizaxis = Input.GetAxisRaw("Horizontal") * acceleration * Time.deltaTime;
-        vertaxis = Input.GetAxisRaw("Vertical");
+        vertaxis = Input.GetAxisRaw("Vertical")*0.8f+0.5f;
         if (Mathf.Abs(horizaxis) > 0)
         {
             if (!attacking)
@@ -115,12 +120,12 @@ public class Player : MonoBehaviour
                 if (horizaxis > 0)
                 {
                     facing = 1;
-                    rb.MoveRotation(Quaternion.LookRotation(Vector3.forward));
+                    rb.MoveRotation(Quaternion.LookRotation(Vector3.back));
                 }
                 else
                 {
                     facing = -1;
-                    rb.MoveRotation(Quaternion.LookRotation(Vector3.back));
+                    rb.MoveRotation(Quaternion.LookRotation(Vector3.forward));
                 }
             }
             // Accelerate!
@@ -142,12 +147,14 @@ public class Player : MonoBehaviour
             }
         }
 
+        limbScript.SetSpeedFraction(horizspeed);
 
         // Move shield based on vertical axis, but only if not attacking
         if (!attacking)
         {
+            currentShieldHeight = vertaxis;
             // Move shield smoothly
-            if (Mathf.Abs(vertaxis - currentShieldHeight) > shieldSpeed * Time.deltaTime)
+            /*if (Mathf.Abs(vertaxis - currentShieldHeight) > shieldSpeed * Time.deltaTime)
             {
                 currentShieldHeight += shieldSpeed *
                     Time.deltaTime * Mathf.Sign(vertaxis - currentShieldHeight);
@@ -155,10 +162,11 @@ public class Player : MonoBehaviour
             else
             {
                 currentShieldHeight = vertaxis;
-            }
+            }*/
             // Set shield height here
-            shieldrb.MovePosition(rb.position + 0.5f * facing * Vector3.right +
-                                  Vector3.up * (currentShieldHeight / 2f));
+            /*shieldrb.MovePosition(rb.position + 0.5f * facing * Vector3.right +
+                                  Vector3.up * (currentShieldHeight / 2f));*/
+            limbScript.SetShieldHeight(currentShieldHeight);
         }
 
         // If not jumping already, do a jump!
@@ -177,8 +185,9 @@ public class Player : MonoBehaviour
         // Attack!
         if (!attacking && Input.GetButtonDown("Fire1"))
         {
+            limbScript.Stab(currentShieldHeight,false);
+            //StartCoroutine(Stab(currentShieldHeight));
 
-            StartCoroutine(Stab(currentShieldHeight));
         }
 
     }
@@ -186,7 +195,7 @@ public class Player : MonoBehaviour
 
 
     // Stab animation
-    IEnumerator Stab(float stabheight)
+    /*IEnumerator Stab(float stabheight)
     {
         swordbox.enabled = true; // turn on swordbox to do damage
         attacking = true;
@@ -225,7 +234,7 @@ public class Player : MonoBehaviour
         // No longer attacking
         attacking = false;
         swordbox.enabled = false;
-    }
+    }*/
 
     // No jumping on collision.
     // Doubles for allowing walljumps in the future? Maybe?
@@ -258,6 +267,7 @@ public class Player : MonoBehaviour
         nocontrol = true;
         //rb.MovePosition(rb.position - stepdist);
         float linkspeed = (justfall ? terminalVelocity : maxspeed);
+        limbScript.SetSpeedFraction(linkspeed);
         float sethorizspeed=maxspeed * (stepdist[0]);
         yield return null;
         stepdist *= multiplier;
@@ -277,6 +287,7 @@ public class Player : MonoBehaviour
             yield return null;
         }
         horizspeed = sethorizspeed;
+        limbScript.SetSpeedFraction(sethorizspeed);
         nocontrol = false;
         rb.isKinematic = false;
     }

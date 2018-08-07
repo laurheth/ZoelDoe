@@ -71,7 +71,7 @@ public class LinkObject : MonoBehaviour {
             }
         }
         movelocation[2] = 0f;
-        movelocation[1] += 0.5f;
+        //movelocation[1] += 0.5f;
         if (rememberx > 0) { movelocation[0]=rememberx; }
         movelocation -= stepdirection;
         PlayerObj.transform.position = movelocation;

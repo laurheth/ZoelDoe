@@ -16,7 +16,7 @@ public class Item : MonoBehaviour {
     {
         Debug.Log("Hit:" + other.gameObject.tag);
         if (other.gameObject.tag=="sword") {
-            other.transform.parent.gameObject.GetComponent<Player>().GetItem(itemType, Quantity);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().GetItem(itemType, Quantity);
             transform.parent.gameObject.GetComponent<LevelGenerator>().UnTrack(trackid);
             Destroy(gameObject);
         }

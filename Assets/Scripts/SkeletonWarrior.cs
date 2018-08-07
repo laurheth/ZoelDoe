@@ -49,7 +49,7 @@ public class SkeletonWarrior : Monster {
             {
                 stabtime += Time.deltaTime;
                 if (stabtime > maxStabInterval) {
-                    limbScript.Stab(Random.Range(0.1f, 0.9f));
+                    limbScript.Stab(Random.Range(0f,1f));
                     stabtime -= Random.Range(maxStabInterval / 2f, maxStabInterval);
                 }
 
@@ -68,7 +68,7 @@ public class SkeletonWarrior : Monster {
             //playerShieldRelHeight
             /*shieldHeight = Mathf.Lerp(shieldHeight,
                                     Mathf.Clamp(playerShieldRelHeight, 0, 1), shieldT*Time.deltaTime);*/
-            limbScript.SetShieldHeight(Mathf.Clamp(playerShieldRelHeight, 0, 1));
+            limbScript.SetShieldHeight(playerShieldRelHeight);
 
         }
     }

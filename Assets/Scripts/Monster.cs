@@ -28,7 +28,11 @@ public class Monster : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         awakened = false;
         playerShield = GameObject.FindGameObjectWithTag("PlayerShield").transform;
-
+        Debug.Log("shields found:"+GameObject.FindGameObjectsWithTag("PlayerShield").Length);
+        for (int i = 0; i < GameObject.FindGameObjectsWithTag("PlayerShield").Length;i++) {
+            Debug.Log("Shield "+i+" " +GameObject.FindGameObjectsWithTag("PlayerShield")[i].name);
+            Debug.Log(GameObject.FindGameObjectsWithTag("PlayerShield")[i].transform.position);
+        }
 	}
 	
 	// Update is called once per frame
@@ -45,6 +49,8 @@ public class Monster : MonoBehaviour {
             }
         }
         playerShieldRelHeight = playerShield.position.y - transform.position.y;
+        //playerShield.name = "aaaa";
+        //Debug.Log("playershield: " + playerShield.position);
 
 	}
 
