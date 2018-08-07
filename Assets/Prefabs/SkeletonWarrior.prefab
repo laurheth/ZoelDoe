@@ -522,7 +522,7 @@ MonoBehaviour:
   damage: 1
   awakedistsqr: 16
   speed: 2
-  maxStabInterval: 0
+  maxStabInterval: 4
   shieldT: 4
   stopdist: 1.4
 --- !u!114 &114475799443553466
@@ -567,8 +567,8 @@ MonoBehaviour:
   stepAngle: 45
   lowerLegAngle: 30
   shieldMovement: 4
-  stabTime: 0
-  stabSpeed: 0
+  stabTime: 0.32
+  stabSpeed: 2.5
 --- !u!136 &136750303019639748
 CapsuleCollider:
   m_ObjectHideFlags: 1

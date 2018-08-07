@@ -32,6 +32,7 @@ public class SwordAndShieldUser : MonoBehaviour {
     Vector3 shieldPosBase;
     Vector3 shieldPos;
     Vector3 swordPosBase;
+    Vector3 swordPos;
 
     public void Awake()
     {
@@ -83,12 +84,30 @@ public class SwordAndShieldUser : MonoBehaviour {
         rb.MovePosition(rb.position - transform.right * speed * speedfraction * Time.fixedDeltaTime);
     }*/
 
+    private void LateUpdate()
+    {
+        restpos = Quaternion.LookRotation(transform.forward);
+        if (!attacking)
+        {
+            Sword.transform.localRotation = BaseSwordRot;
+            swordPos = transform.position + swordPosBase
+                             + ((facing < 0) ? (-2f * swordPosBase[0] * Vector3.right) : (Vector3.zero));
+        }
+        else
+        {
+            Sword.transform.rotation = restpos * Quaternion.Euler(0, 0, 90);
+        }
+        Shield.transform.rotation = restpos;
+    }
+
     public void Update()
     {
         //base.Update();
         restpos = Quaternion.LookRotation(transform.forward);
         if (!attacking) {
             Sword.transform.localRotation = BaseSwordRot;
+            swordPos = transform.position + swordPosBase
+                             + ((facing < 0) ? (-2f * swordPosBase[0] * Vector3.right) : (Vector3.zero));
         }
         else {
             Sword.transform.rotation=restpos*Quaternion.Euler(0,0,90);
@@ -121,6 +140,7 @@ public class SwordAndShieldUser : MonoBehaviour {
 
         }
         ShieldHeightMove();
+        ArmCompute(LimbDict[Limb.LArmL], LimbDict[Limb.UArmL], swordPos);
         /*if (facing * (playerobj.transform.position.x - transform.position.x) > 0)
         {
             facing *= -1;
@@ -135,7 +155,8 @@ public class SwordAndShieldUser : MonoBehaviour {
         shieldPos = shieldPosBase + transform.up * currentShieldHeight;
         shieldPos[0] *= transform.right[0];
         shieldPos += transform.position;
-        Shield.transform.position = shieldPos;
+        //Shield.transform.position = shieldPos;
+        ArmCompute(LimbDict[Limb.LArmR], LimbDict[Limb.UArmR], shieldPos);
     }
 
     public void SetShieldHeight(float newheight) {
@@ -147,6 +168,28 @@ public class SwordAndShieldUser : MonoBehaviour {
         StartCoroutine(StabCoroutine(stabheight*capsuleCollider.height));
     }
 
+    // Assumes arms of equal length
+    // Treats like an isocelese triangle, base is line from shoulder to hand,
+    // Vertex angle is elbow
+    void ArmCompute(Transform ForeArm, Transform UpperArm, Vector3 targetpos) {
+        Vector3 BaseVector = targetpos - UpperArm.position;
+        float offsetangle = Vector3.Angle(-transform.right, BaseVector);
+        float armlength = (ForeArm.position - UpperArm.position).magnitude;
+
+        float height = Mathf.Sqrt(armlength * armlength - BaseVector.sqrMagnitude / 4);
+        if (float.IsNaN(height)) {
+            height = 0f;
+        }
+
+        float baseAngle = Mathf.Asin(height / armlength);
+
+        float elbowAngle = Mathf.PI - 2 * baseAngle;
+        Debug.Log(UpperArm.position);
+        UpperArm.localEulerAngles=new Vector3(0, 0, 180f*baseAngle/Mathf.PI + offsetangle+90);
+        ForeArm.localEulerAngles = new Vector3(0, 0, elbowAngle * 180f/Mathf.PI+180f);
+
+    }
+
     // Stab animation
     IEnumerator StabCoroutine(float stabheight)
     {
@@ -154,8 +197,9 @@ public class SwordAndShieldUser : MonoBehaviour {
         swordbox.enabled = true; // turn on swordbox to do damage
         attacking = true;
         // point forward and get ready to stab!
-        swordrb.MoveRotation(Quaternion.Euler(0, 0, -90 * facing));
-        swordrb.MovePosition(transform.position + transform.up * stabheight);
+        /*swordrb.MoveRotation(Quaternion.Euler(0, 0, -90 * facing));
+        swordrb.MovePosition(transform.position + transform.up * stabheight);*/
+        swordPos = transform.position + transform.up * stabheight;
 
         float timepassed = 0f;
         yield return null;
@@ -164,8 +208,8 @@ public class SwordAndShieldUser : MonoBehaviour {
         while (timepassed < Mathf.Abs(stabTime))
         {
             timepassed += Time.deltaTime;
-            swordrb.MovePosition(transform.position + transform.up * stabheight
-                                 + Sword.transform.up * timepassed * stabSpeed);
+            swordPos=transform.position + transform.up * stabheight
+                                 - transform.right * timepassed * stabSpeed;
             yield return null;
         }
         timepassed = 0f;
@@ -174,15 +218,15 @@ public class SwordAndShieldUser : MonoBehaviour {
         while (timepassed < Mathf.Abs(stabTime))
         {
             timepassed += Time.deltaTime;
-            swordrb.MovePosition(transform.position + transform.up * stabheight
-                                 + Sword.transform.up * (stabTime - timepassed) * stabSpeed);
+            swordPos=transform.position + transform.up * stabheight
+                              - transform.right * (stabTime - timepassed) * stabSpeed;
             yield return null;
         }
 
         // Return to rest position.
-        swordrb.MovePosition(transform.position + swordPosBase
-                             + ((facing < 0) ? (-2f * swordPosBase[0] * Vector3.right) : (Vector3.zero)));
-        swordrb.MoveRotation(transform.rotation * BaseSwordRot);
+        swordPos=transform.position + swordPosBase
+                             + ((facing < 0) ? (-2f * swordPosBase[0] * Vector3.right) : (Vector3.zero));
+        //swordrb.MoveRotation(transform.rotation * BaseSwordRot);
         yield return null;
 
         // No longer attacking
