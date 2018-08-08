@@ -20,6 +20,8 @@ public class SwordAndShieldUser : MonoBehaviour {
     public float shieldMovement;
     float TorsoWobble;
     float TorsoBaseline;
+    float crouch;
+    float crouchangle;
     public float stabTime;
     public float stabSpeed;
     public int facing;
@@ -38,6 +40,8 @@ public class SwordAndShieldUser : MonoBehaviour {
     {
         //base.Start();
         facing = 1;
+        crouch = 1f;
+        crouchangle = 0f;
         speedfraction = 1f;
         capsuleCollider = GetComponent<CapsuleCollider>();
         BaseSwordRot = Sword.transform.localRotation;
@@ -125,15 +129,15 @@ public class SwordAndShieldUser : MonoBehaviour {
         if (Mathf.Approximately(speedfraction, 0f))
         {
             time = stepPeriod / 2f;
-            LimbDict[Limb.LLegR].localRotation = Quaternion.Slerp(LimbDict[Limb.LLegR].localRotation, Quaternion.identity, 0.2f);
-            LimbDict[Limb.LLegL].localRotation = Quaternion.Slerp(LimbDict[Limb.LLegL].localRotation, Quaternion.identity, 0.2f);
+            LimbDict[Limb.LLegR].localRotation = Quaternion.Slerp(LimbDict[Limb.LLegR].localRotation, Quaternion.Euler(0,0,0), 0.2f);
+            LimbDict[Limb.LLegL].localRotation = Quaternion.Slerp(LimbDict[Limb.LLegL].localRotation, Quaternion.Euler(0, 0, 0), 0.2f);
             LimbDict[Limb.ULegR].localRotation = Quaternion.Slerp(LimbDict[Limb.ULegR].localRotation, Quaternion.Euler(0, 0, 180), 0.2f);
             LimbDict[Limb.ULegL].localRotation = Quaternion.Slerp(LimbDict[Limb.ULegL].localRotation, Quaternion.Euler(0, 0, 180), 0.2f);
             LimbDict[Limb.Torso].localPosition = Vector3.Lerp(LimbDict[Limb.Torso].localPosition,new Vector3(0, TorsoBaseline, 0),0.2f);
         }
         else
         {
-            time += speedfraction * Time.deltaTime;
+            time += speedfraction/crouch * Time.deltaTime;
             //Debug.Log(lowerLegAngle.ToString()+" "+time.ToString()+" "+stepPeriod.ToString());
             LimbDict[Limb.LLegR].localRotation = Quaternion.Euler(0, 0, lowerLegAngle * Mathf.PingPong(time, stepPeriod) / stepPeriod);
             LimbDict[Limb.ULegR].localRotation = Quaternion.Euler(0, 0, 180 + (stepAngle) * (Mathf.PingPong(time, stepPeriod) / stepPeriod - 0.5f));
