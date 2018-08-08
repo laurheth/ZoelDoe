@@ -19,9 +19,14 @@ public class SwordAndShieldUser : MonoBehaviour {
     public float lowerLegAngle;
     public float shieldMovement;
     float TorsoWobble;
+    //float armlength;
+    public float footsize;
+    //public float crouchThreshold;
     float TorsoBaseline;
     float crouch;
+    float crouchto;
     float crouchangle;
+    float TorsoHeight;
     public float stabTime;
     public float stabSpeed;
     public int facing;
@@ -41,6 +46,7 @@ public class SwordAndShieldUser : MonoBehaviour {
         //base.Start();
         facing = 1;
         crouch = 1f;
+        crouchto = 1f;
         crouchangle = 0f;
         speedfraction = 1f;
         capsuleCollider = GetComponent<CapsuleCollider>();
@@ -67,6 +73,8 @@ public class SwordAndShieldUser : MonoBehaviour {
         shieldPosBase[1] = 0;
         currentShieldHeight = 0.8f;
         SetShieldHeight(currentShieldHeight);
+//TorsoHeight=LimbDict[Limb.Torso].localPosition
+        Crouch(1f);
         //shieldPos=transform.position + shieldPosBase;
         //Shield.transform.position = transform.position+shieldPosBase;
     }
@@ -85,6 +93,17 @@ public class SwordAndShieldUser : MonoBehaviour {
     public class LimbIdent {
         public Limb LimbID;
         public GameObject LimbObj;
+    }
+
+    public void SetCrouch(float newcrouchfraction) {
+        crouchto = Mathf.Clamp(newcrouchfraction, 0.1f, 1f);
+    }
+
+    void Crouch(float crouchfraction) {
+        crouch = Mathf.Lerp(crouch,Mathf.Clamp(crouchfraction, 0.1f, 1f),shieldMovement*Time.deltaTime);
+        crouchangle = 90-180f*Mathf.Asin(crouch)/Mathf.PI;
+        TorsoHeight = TorsoBaseline - (legLength-footsize)*(1-crouch);// + Mathf.Min(((-legLength/2) * (1-crouch))+footsize,0);
+        Debug.Log("crch:" + Mathf.Min(((-legLength / 2) * (1 - crouch)) + footsize, 0));
     }
 
     /*private void FixedUpdate()
@@ -129,27 +148,27 @@ public class SwordAndShieldUser : MonoBehaviour {
         if (Mathf.Approximately(speedfraction, 0f))
         {
             time = stepPeriod / 2f;
-            LimbDict[Limb.LLegR].localRotation = Quaternion.Slerp(LimbDict[Limb.LLegR].localRotation, Quaternion.Euler(0,0,0), 0.2f);
-            LimbDict[Limb.LLegL].localRotation = Quaternion.Slerp(LimbDict[Limb.LLegL].localRotation, Quaternion.Euler(0, 0, 0), 0.2f);
-            LimbDict[Limb.ULegR].localRotation = Quaternion.Slerp(LimbDict[Limb.ULegR].localRotation, Quaternion.Euler(0, 0, 180), 0.2f);
-            LimbDict[Limb.ULegL].localRotation = Quaternion.Slerp(LimbDict[Limb.ULegL].localRotation, Quaternion.Euler(0, 0, 180), 0.2f);
-            LimbDict[Limb.Torso].localPosition = Vector3.Lerp(LimbDict[Limb.Torso].localPosition,new Vector3(0, TorsoBaseline, 0),0.2f);
+            LimbDict[Limb.LLegR].localRotation = Quaternion.Slerp(LimbDict[Limb.LLegR].localRotation, Quaternion.Euler(0,0,0+2*crouchangle), 0.2f);
+            LimbDict[Limb.LLegL].localRotation = Quaternion.Slerp(LimbDict[Limb.LLegL].localRotation, Quaternion.Euler(0, 0, 0+ 2*crouchangle), 0.2f);
+            LimbDict[Limb.ULegR].localRotation = Quaternion.Slerp(LimbDict[Limb.ULegR].localRotation, Quaternion.Euler(0, 0, 180- crouchangle), 0.2f);
+            LimbDict[Limb.ULegL].localRotation = Quaternion.Slerp(LimbDict[Limb.ULegL].localRotation, Quaternion.Euler(0, 0, 180- crouchangle), 0.2f);
+            LimbDict[Limb.Torso].localPosition = Vector3.Lerp(LimbDict[Limb.Torso].localPosition,new Vector3(0, TorsoHeight, 0),0.2f);
         }
         else
         {
             time += speedfraction/crouch * Time.deltaTime;
             //Debug.Log(lowerLegAngle.ToString()+" "+time.ToString()+" "+stepPeriod.ToString());
-            LimbDict[Limb.LLegR].localRotation = Quaternion.Euler(0, 0, lowerLegAngle * Mathf.PingPong(time, stepPeriod) / stepPeriod);
-            LimbDict[Limb.ULegR].localRotation = Quaternion.Euler(0, 0, 180 + (stepAngle) * (Mathf.PingPong(time, stepPeriod) / stepPeriod - 0.5f));
+            LimbDict[Limb.LLegR].localRotation = Quaternion.Euler(0, 0, 2*crouchangle+lowerLegAngle * Mathf.PingPong(time, stepPeriod) / stepPeriod);
+            LimbDict[Limb.ULegR].localRotation = Quaternion.Euler(0, 0, -crouchangle +180 + (stepAngle) * (Mathf.PingPong(time, stepPeriod) / stepPeriod - 0.5f));
 
-            LimbDict[Limb.ULegL].localRotation = Quaternion.Euler(0, 0, 180 + (stepAngle) * (Mathf.PingPong(time - stepPeriod, stepPeriod) / stepPeriod - 0.5f));
-            LimbDict[Limb.LLegL].localRotation = Quaternion.Euler(0, 0, lowerLegAngle * Mathf.PingPong(time - stepPeriod, stepPeriod) / stepPeriod);
+            LimbDict[Limb.ULegL].localRotation = Quaternion.Euler(0, 0, -crouchangle +180 + (stepAngle) * (Mathf.PingPong(time - stepPeriod, stepPeriod) / stepPeriod - 0.5f));
+            LimbDict[Limb.LLegL].localRotation = Quaternion.Euler(0, 0, 2*crouchangle +lowerLegAngle * Mathf.PingPong(time - stepPeriod, stepPeriod) / stepPeriod);
 
-            LimbDict[Limb.Torso].localPosition = new Vector3(0, TorsoBaseline - 2f * TorsoWobble * Mathf.PingPong(time - stepPeriod / 2, stepPeriod / 2) / (stepPeriod), 0);
+            LimbDict[Limb.Torso].localPosition = new Vector3(0, TorsoHeight - 2f * TorsoWobble * Mathf.PingPong(time - stepPeriod / 2, stepPeriod / 2) / (stepPeriod), 0);
 
         }
         ShieldHeightMove();
-
+        Crouch(crouchto);
         /*if (facing * (playerobj.transform.position.x - transform.position.x) > 0)
         {
             facing *= -1;
@@ -160,6 +179,12 @@ public class SwordAndShieldUser : MonoBehaviour {
     }
 
     void ShieldHeightMove() {
+        /*if (currentShieldHeight<crouchThreshold) {
+            Crouch(0.75f);
+        }
+        else {
+            Crouch(1f);
+        }*/
         currentShieldHeight = Mathf.Lerp(currentShieldHeight, targetShieldHeight, shieldMovement * Time.deltaTime);
         shieldPos = shieldPosBase + transform.up * currentShieldHeight;
         shieldPos[0] *= transform.right[0];

@@ -567,8 +567,12 @@ MonoBehaviour:
   stepAngle: 45
   lowerLegAngle: 30
   shieldMovement: 4
+  footsize: 0.5
+  crouchThreshold: 0
+  crouchto: 0
   stabTime: 0.32
   stabSpeed: 2.5
+  facing: 0
 --- !u!136 &136750303019639748
 CapsuleCollider:
   m_ObjectHideFlags: 1

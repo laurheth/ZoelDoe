@@ -22,7 +22,8 @@ public class Player : MonoBehaviour
     float horizspeed;
     float horizaxis;
     float vertaxis;
-    public float currentShieldHeight;
+    float currentShieldHeight;
+    public float crouchThreshold;
     float facing;
     bool dead;
     bool nocontrol;
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour
     Vector3[] bodyverts;
     PlayerStatCanvas statCanvas;
     SwordAndShieldUser limbScript;
+    Vector2 inputvector;
 
     bool jumping;
     bool attacking;
@@ -52,6 +54,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        inputvector = Vector2.zero;
         dead = false;
         facing = 1;
         rb = GetComponent<Rigidbody>();
@@ -110,8 +113,17 @@ public class Player : MonoBehaviour
             return;
         }
         // inputs
-        horizaxis = Input.GetAxisRaw("Horizontal") * acceleration * Time.deltaTime;
-        vertaxis = Input.GetAxisRaw("Vertical")*0.8f+0.5f;
+
+        horizaxis = Input.GetAxisRaw("Horizontal");// * acceleration * Time.deltaTime;
+        vertaxis = Input.GetAxisRaw("Vertical");
+        inputvector[0] = horizaxis;
+        inputvector[1] = vertaxis;
+        if (inputvector.sqrMagnitude>1) {
+            horizaxis = inputvector.normalized[0];
+            vertaxis= inputvector.normalized[1];
+        }
+
+        vertaxis=vertaxis*0.8f+0.5f;
         if (Mathf.Abs(horizaxis) > 0)
         {
             if (!attacking)
@@ -129,7 +141,8 @@ public class Player : MonoBehaviour
                 }
             }
             // Accelerate!
-            horizspeed += horizaxis;//Input.GetAxis("Horizontal") * acceleration * Time.deltaTime;
+            //horizspeed += horizaxis;//Input.GetAxis("Horizontal") * acceleration * Time.deltaTime;
+            horizspeed = Mathf.Lerp(horizspeed, horizaxis * maxspeed,(acceleration/maxspeed)*Time.deltaTime);
 
             if (horizspeed > maxspeed) { horizspeed = maxspeed; }
             else if (horizspeed < -maxspeed) { horizspeed = -maxspeed; }
@@ -167,6 +180,12 @@ public class Player : MonoBehaviour
             /*shieldrb.MovePosition(rb.position + 0.5f * facing * Vector3.right +
                                   Vector3.up * (currentShieldHeight / 2f));*/
             limbScript.SetShieldHeight(currentShieldHeight);
+            if (currentShieldHeight<crouchThreshold) {
+                limbScript.SetCrouch(0.5f);
+            }
+            else {
+                limbScript.SetCrouch(1f);
+            }
         }
 
         // If not jumping already, do a jump!

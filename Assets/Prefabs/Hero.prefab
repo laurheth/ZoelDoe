@@ -550,6 +550,9 @@ MonoBehaviour:
   stepAngle: 45
   lowerLegAngle: 30
   shieldMovement: 13
+  footsize: 0.25
+  crouchThreshold: 0.5
+  crouchto: 0
   stabTime: 0.08
   stabSpeed: 10
   facing: 0

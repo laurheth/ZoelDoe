@@ -11,6 +11,7 @@ public class SkeletonWarrior : Monster {
     public float maxStabInterval;
     float stabtime;
     public float shieldT;
+    public float crouchThreshold;
     //float shieldHeight;
 
     public float stopdist;
@@ -53,7 +54,15 @@ public class SkeletonWarrior : Monster {
                     stabtime -= Random.Range(maxStabInterval / 2f, maxStabInterval);
                 }
 
-
+                if (playerShieldRelHeight<crouchThreshold) {
+                    limbScript.SetCrouch(0.5f);
+                }
+                else {
+                    limbScript.SetCrouch(1f);
+                }
+            }
+            else {
+                limbScript.SetCrouch(1f);
             }
             if (Mathf.Abs(playerdist) < stopdist)
             {
