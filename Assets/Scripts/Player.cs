@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
         //facing = Vector3.right;
         transform.parent = null;
         nocontrol = false;
-        transform.position += Vector3.up;// * 0.5f;
+        //transform.position += Vector3.up;// * 0.5f;
         //statCanvas = statCanvasObj.GetComponent<PlayerStatCanvas>();
         limbScript = GetComponent<SwordAndShieldUser>();
         limbScript.SetSpeed(maxspeed);
@@ -257,9 +257,13 @@ public class Player : MonoBehaviour
 
     // No jumping on collision.
     // Doubles for allowing walljumps in the future? Maybe?
+
     private void OnCollisionEnter(Collision collision)
     {
         jumping = false;
+        if (collision.gameObject.tag=="MonsterSword") {
+            damage(collision.gameObject.GetComponent<sword>().damage);
+        }
     }
 
     public void damage(int dmg)
@@ -331,5 +335,6 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
 }
 

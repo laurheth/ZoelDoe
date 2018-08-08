@@ -27,7 +27,8 @@ public class Monster : MonoBehaviour {
         playerrb = playerobj.GetComponent<Rigidbody>();
         rb = GetComponent<Rigidbody>();
         awakened = false;
-        playerShield = GameObject.FindGameObjectWithTag("PlayerShield").transform;
+        //playerShield = GameObject.FindGameObjectWithTag("PlayerShield").transform;
+        playerShield = playerobj.GetComponent<SwordAndShieldUser>().Shield.transform;
         Debug.Log("shields found:"+GameObject.FindGameObjectsWithTag("PlayerShield").Length);
         for (int i = 0; i < GameObject.FindGameObjectsWithTag("PlayerShield").Length;i++) {
             Debug.Log("Shield "+i+" " +GameObject.FindGameObjectsWithTag("PlayerShield")[i].name);

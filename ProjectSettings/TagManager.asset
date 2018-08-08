@@ -8,6 +8,8 @@ TagManager:
   - Linker
   - Item
   - Monster
+  - MonsterSword
+  - Shield
   - PlayerShield
   layers:
   - Default

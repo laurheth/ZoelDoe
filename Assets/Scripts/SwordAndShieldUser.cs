@@ -36,6 +36,7 @@ public class SwordAndShieldUser : MonoBehaviour {
     float speed;
     float targetShieldHeight;
     float currentShieldHeight;
+    bool stabcancelled;
     Vector3 shieldPosBase;
     Vector3 shieldPos;
     Vector3 swordPosBase;
@@ -43,6 +44,7 @@ public class SwordAndShieldUser : MonoBehaviour {
 
     public void Awake()
     {
+        stabcancelled = false;
         //base.Start();
         facing = 1;
         crouch = 1f;
@@ -103,7 +105,7 @@ public class SwordAndShieldUser : MonoBehaviour {
         crouch = Mathf.Lerp(crouch,Mathf.Clamp(crouchfraction, 0.1f, 1f),shieldMovement*Time.deltaTime);
         crouchangle = 90-180f*Mathf.Asin(crouch)/Mathf.PI;
         TorsoHeight = TorsoBaseline - (legLength-footsize)*(1-crouch);// + Mathf.Min(((-legLength/2) * (1-crouch))+footsize,0);
-        Debug.Log("crch:" + Mathf.Min(((-legLength / 2) * (1 - crouch)) + footsize, 0));
+        //Debug.Log("crch:" + Mathf.Min(((-legLength / 2) * (1 - crouch)) + footsize, 0));
     }
 
     /*private void FixedUpdate()
@@ -199,6 +201,9 @@ public class SwordAndShieldUser : MonoBehaviour {
     }
 
     public void Stab (float stabheight, bool scalebycapsule=true) {
+        if (attacking) {
+            return;
+        }
         Debug.Log(stabheight);
         Debug.Log(capsuleCollider.height);
         if (scalebycapsule)
@@ -236,15 +241,17 @@ public class SwordAndShieldUser : MonoBehaviour {
     // Stab animation
     IEnumerator StabCoroutine(float stabheight)
     {
-        Debug.Log("Stabbing: " + stabheight);
+        //Debug.Log("Stabbing: " + stabheight);
+        stabcancelled = false;
         swordbox.enabled = true; // turn on swordbox to do damage
 
         // point forward and get ready to stab!
         /*swordrb.MoveRotation(Quaternion.Euler(0, 0, -90 * facing));
         swordrb.MovePosition(transform.position + transform.up * stabheight);*/
-        swordPos = transform.position + transform.up * stabheight;
+        float timepassed = -stabTime;
+        swordPos = transform.position + transform.up * stabheight - transform.right * timepassed * stabSpeed;;
         attacking = true;
-        float timepassed = 0f;
+
         yield return null;
 
         // Move sword out
@@ -254,16 +261,20 @@ public class SwordAndShieldUser : MonoBehaviour {
             swordPos=transform.position + transform.up * stabheight
                                  - transform.right * timepassed * stabSpeed;
             yield return null;
+            if (stabcancelled) {
+                //Debug.Log("Stab cancelled!");
+                break;
+            }
 
         }
-        timepassed = 0f;
+        //timepassed = 0f;
 
         // Move sword back in
-        while (timepassed < Mathf.Abs(stabTime))
+        while (timepassed > 0) // Mathf.Abs(stabTime))
         {
-            timepassed += Time.deltaTime;
+            timepassed -= Time.deltaTime;
             swordPos=transform.position + transform.up * stabheight
-                              - transform.right * (stabTime - timepassed) * stabSpeed;
+                              - transform.right * (timepassed) * stabSpeed;
             yield return null;
         }
         attacking = false;
@@ -276,6 +287,11 @@ public class SwordAndShieldUser : MonoBehaviour {
         // No longer attacking
 
         swordbox.enabled = false;
+    }
+
+    public void CancelStab() {
+        stabcancelled = true;
+        //Debug.Log("Cncelstabfunction");
     }
 
 }

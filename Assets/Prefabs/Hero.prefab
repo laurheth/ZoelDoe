@@ -36,6 +36,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4861974689816424}
   - component: {fileID: 212473391015911502}
+  - component: {fileID: 54540069260837290}
+  - component: {fileID: 65252741713323580}
   m_Layer: 9
   m_Name: Shield
   m_TagString: PlayerShield
@@ -391,7 +393,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1508730050282512}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.654867, y: 11.093393, z: 29.801857}
+  m_LocalPosition: {x: -0.110337734, y: -6.342198, z: 17.828815}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4169326746371716}
@@ -481,6 +483,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!54 &54540069260837290
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1175570217880122}
+  serializedVersion: 2
+  m_Mass: 5
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!54 &54668412076273562
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -508,6 +525,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2700002, y: 0.8700004, z: 0.19999999}
   m_Center: {x: -0.110850066, y: 0.37313837, z: 0}
+--- !u!65 &65252741713323580
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1175570217880122}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.24000022, y: 0.87000084, z: 0.6}
+  m_Center: {x: -0.091930784, y: 0.010815839, z: 0}
 --- !u!114 &114581407374648568
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -551,10 +580,8 @@ MonoBehaviour:
   lowerLegAngle: 30
   shieldMovement: 13
   footsize: 0.25
-  crouchThreshold: 0.5
-  crouchto: 0
-  stabTime: 0.08
-  stabSpeed: 10
+  stabTime: 0.1
+  stabSpeed: 20
   facing: 0
 --- !u!114 &114961259512552144
 MonoBehaviour:
@@ -574,7 +601,7 @@ MonoBehaviour:
   shieldSpeed: 13
   terminalVelocity: 10
   hp: 6
-  currentShieldHeight: 0
+  crouchThreshold: 0
 --- !u!114 &114988383688797272
 MonoBehaviour:
   m_ObjectHideFlags: 1

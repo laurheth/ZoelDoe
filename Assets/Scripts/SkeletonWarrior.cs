@@ -50,7 +50,7 @@ public class SkeletonWarrior : Monster {
             {
                 stabtime += Time.deltaTime;
                 if (stabtime > maxStabInterval) {
-                    limbScript.Stab(Random.Range(0f,1f));
+                    limbScript.Stab(Random.Range(0.1f,0.9f));
                     stabtime -= Random.Range(maxStabInterval / 2f, maxStabInterval);
                 }
 
