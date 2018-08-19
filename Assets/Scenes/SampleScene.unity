@@ -546,6 +546,9 @@ MonoBehaviour:
   - ObjectName: SkeletonWarrior
     prefab: {fileID: 1669288832919712, guid: 96efd61f89aa2456997d59819c7cb8dd, type: 2}
     TrackThis: 1
+  - ObjectName: LockedDoor
+    prefab: {fileID: 1328553222872088, guid: a981130c7b7854bb1b719dd56c1168a9, type: 2}
+    TrackThis: 1
   cam: {fileID: 282840813}
 --- !u!4 &794703524
 Transform:

@@ -11,6 +11,7 @@ TagManager:
   - MonsterSword
   - Shield
   - PlayerShield
+  - LockDoor
   layers:
   - Default
   - TransparentFX

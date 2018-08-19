@@ -148,6 +148,9 @@ public class LevelGenerator : MonoBehaviour {
                                                 else if (nextobj.tag=="Item") {
                                                     nextobj.GetComponent<Item>().SetID(trackobjid - 1);
                                                 }
+                                                else if (nextobj.tag=="LockDoor") {
+                                                    nextobj.GetComponent<LockDoor>().SetID(trackobjid - 1);
+                                                }
                                             }
                                         }
                                     }

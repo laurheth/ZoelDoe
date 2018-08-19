@@ -211,50 +211,6 @@ public class Player : MonoBehaviour
 
     }
 
-
-
-    // Stab animation
-    /*IEnumerator Stab(float stabheight)
-    {
-        swordbox.enabled = true; // turn on swordbox to do damage
-        attacking = true;
-        // point forward and get ready to stab!
-        swordrb.MoveRotation(Quaternion.Euler(0, 0, -90 * facing));
-        swordrb.MovePosition(rb.position + transform.up * stabheight / 2f);
-
-        float timepassed = 0f;
-        yield return null;
-
-        // Move sword out
-        while (timepassed < Mathf.Abs(stabTime))
-        {
-            timepassed += Time.deltaTime;
-            swordrb.MovePosition(rb.position + transform.up * stabheight / 2f
-                                 + sword.transform.up * timepassed * stabSpeed);
-            yield return null;
-        }
-        timepassed = 0f;
-
-        // Move sword back in
-        while (timepassed < Mathf.Abs(stabTime))
-        {
-            timepassed += Time.deltaTime;
-            swordrb.MovePosition(rb.position + transform.up * stabheight / 2f
-                                 + sword.transform.up * (stabTime - timepassed) * stabSpeed);
-            yield return null;
-        }
-
-        // Return to rest position.
-        swordrb.MovePosition(rb.position + swordpos
-                             + ((facing < 0) ? (-2f * swordpos[0] * Vector3.right) : (Vector3.zero)));
-        swordrb.MoveRotation(rb.rotation * swordangle);
-        yield return null;
-
-        // No longer attacking
-        attacking = false;
-        swordbox.enabled = false;
-    }*/
-
     // No jumping on collision.
     // Doubles for allowing walljumps in the future? Maybe?
 
@@ -263,6 +219,13 @@ public class Player : MonoBehaviour
         jumping = false;
         if (collision.gameObject.tag=="MonsterSword") {
             damage(collision.gameObject.GetComponent<sword>().damage);
+        }
+        else if (collision.gameObject.tag=="LockDoor") {
+            LockDoor doorscript = collision.gameObject.GetComponent<LockDoor>();
+            if (doorscript.enabled && doorscript.closed && numkeys>0) {
+                numkeys--;
+                doorscript.OpenDoor();
+            }
         }
     }
 
