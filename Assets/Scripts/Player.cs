@@ -223,7 +223,7 @@ public class Player : MonoBehaviour
         else if (collision.gameObject.tag=="LockDoor") {
             LockDoor doorscript = collision.gameObject.GetComponent<LockDoor>();
             if (doorscript.enabled && doorscript.closed && numkeys>0) {
-                numkeys--;
+                GetKey(-1);
                 doorscript.OpenDoor();
             }
         }

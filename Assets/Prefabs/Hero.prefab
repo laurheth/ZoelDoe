@@ -580,8 +580,8 @@ MonoBehaviour:
   lowerLegAngle: 30
   shieldMovement: 13
   footsize: 0.25
-  stabTime: 0.1
-  stabSpeed: 20
+  stabTime: 0.05
+  stabSpeed: 40
   facing: 0
 --- !u!114 &114961259512552144
 MonoBehaviour:
