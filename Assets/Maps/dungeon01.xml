@@ -32,6 +32,10 @@
         <symbol>X</symbol>
         <isobject>BrickBlockDark</isobject>
     </tile>
+    <tile>
+        <symbol>%</symbol>
+        <isobject>CrumbleFloor</isobject>
+    </tile>
   
     <screen id="screen0">
         <grid zpos="0">
@@ -82,8 +86,8 @@
             #.........................#
             #.........................#
             #.........................#
-            1.........................#
-            1..@......S.......b.S.....#
+            1.....%%%%................#
+            1..@..............b.S.....#
             #####################22####
         </grid>
         <grid zpos="1">

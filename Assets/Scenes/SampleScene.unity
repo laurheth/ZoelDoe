@@ -549,6 +549,9 @@ MonoBehaviour:
   - ObjectName: LockedDoor
     prefab: {fileID: 1328553222872088, guid: a981130c7b7854bb1b719dd56c1168a9, type: 2}
     TrackThis: 1
+  - ObjectName: CrumbleFloor
+    prefab: {fileID: 1000070254368378, guid: 1be8aa1588c6f4613aad3b21609be10e, type: 2}
+    TrackThis: 0
   cam: {fileID: 282840813}
 --- !u!4 &794703524
 Transform:
