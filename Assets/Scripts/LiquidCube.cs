@@ -9,10 +9,15 @@ public class LiquidCube : MonoBehaviour {
     float WaveNumber;
     public float WaveHeight;
     public float WaveSpeed;
+    public Vector2 movement;
     Vector3 position;
     Vector3 basepos;
+    Vector2 offset;
+    Renderer rend;
 	// Use this for initialization
 	void Start () {
+        offset = Vector2.zero;
+        rend = GetComponent<Renderer>();
         Frequency = WaveSpeed / WaveLength;
         WaveNumber = 1 / WaveLength;
         basepos = transform.position + BaseHeight * Vector3.up;
@@ -23,8 +28,10 @@ public class LiquidCube : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         position[1] = basepos[1];
-        position[1] += WaveHeight * Mathf.Sin(2 * Mathf.PI * ( Frequency * (Time.time) + WaveNumber*position[0]));
+        position[1] += WaveHeight * Mathf.Sin(2 * Mathf.PI * ( Frequency * (Time.time)));
         transform.position = position;
+        offset += movement * Time.deltaTime;
+        rend.material.SetTextureOffset("_MainTex",offset);
 	}
 
     private void OnTriggerEnter(Collider other)
