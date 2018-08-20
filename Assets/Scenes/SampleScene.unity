@@ -552,6 +552,9 @@ MonoBehaviour:
   - ObjectName: CrumbleFloor
     prefab: {fileID: 1000070254368378, guid: 1be8aa1588c6f4613aad3b21609be10e, type: 2}
     TrackThis: 0
+  - ObjectName: LavaCube
+    prefab: {fileID: 1715177969248992, guid: 24db8d05125da4b30bb19d6323326036, type: 2}
+    TrackThis: 0
   cam: {fileID: 282840813}
 --- !u!4 &794703524
 Transform:

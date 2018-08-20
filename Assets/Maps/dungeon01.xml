@@ -36,6 +36,10 @@
         <symbol>%</symbol>
         <isobject>CrumbleFloor</isobject>
     </tile>
+    <tile>
+        <symbol>~</symbol>
+        <isobject>LavaCube</isobject>
+    </tile>
   
     <screen id="screen0">
         <grid zpos="0">
@@ -88,7 +92,7 @@
             #.........................#
             1.....%%%%................#
             1..@..............b.S.....#
-            #####################22####
+            #####~~~~~~##########22####
         </grid>
         <grid zpos="1">
             ###########################
