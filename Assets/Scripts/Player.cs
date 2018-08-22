@@ -216,7 +216,10 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        jumping = false;
+        if (collision.transform.position[1] < transform.position[1]+1)
+        {
+            jumping = false;
+        }
         if (collision.gameObject.tag=="MonsterSword") {
             damage(collision.gameObject.GetComponent<sword>().damage);
         }

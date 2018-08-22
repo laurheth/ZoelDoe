@@ -16,12 +16,15 @@ public class LiquidCube : MonoBehaviour {
     Renderer rend;
 	// Use this for initialization
 	void Start () {
-        offset = Vector2.zero;
+        //int randint = Random.Range(0, 4);
+
         rend = GetComponent<Renderer>();
         Frequency = WaveSpeed / WaveLength;
         WaveNumber = 1 / WaveLength;
         basepos = transform.position + BaseHeight * Vector3.up;
         position = basepos;
+
+        offset = new Vector2(-position[0], -position[2])/3f;
         Update();
 	}
 	
