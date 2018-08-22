@@ -81,4 +81,12 @@ public class SkeletonWarrior : Monster {
 
         }
     }
+
+    public override void Die()
+    {
+
+        limbScript.Disassemble();
+
+        base.Die();
+    }
 }

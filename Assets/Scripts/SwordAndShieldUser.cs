@@ -294,4 +294,21 @@ public class SwordAndShieldUser : MonoBehaviour {
         //Debug.Log("Cncelstabfunction");
     }
 
+    public void Disassemble() {
+
+        foreach (KeyValuePair<Limb,Transform> limb in LimbDict) {
+            limb.Value.parent = transform.parent;
+            limb.Value.gameObject.AddComponent<Rigidbody>();
+            limb.Value.gameObject.AddComponent<BoxCollider>();
+        }
+        Shield.transform.parent = transform.parent;
+        Shield.tag = "Untagged";
+        Shield.GetComponent<Rigidbody>().isKinematic = false;
+        Shield.GetComponent<Rigidbody>().useGravity = true;
+        Sword.transform.parent = transform.parent;
+        Sword.tag = "Untagged";
+        Sword.GetComponent<Rigidbody>().isKinematic = false;
+        Sword.GetComponent<Rigidbody>().useGravity = true;
+    }
+
 }

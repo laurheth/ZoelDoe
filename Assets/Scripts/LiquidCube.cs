@@ -42,5 +42,8 @@ public class LiquidCube : MonoBehaviour {
         if (other.tag=="Player") {
             other.gameObject.GetComponent<Player>().damage(1000);
         }
+        else if (other.tag=="Monster") {
+            other.gameObject.GetComponent<Monster>().Damage(1000);
+        }
     }
 }

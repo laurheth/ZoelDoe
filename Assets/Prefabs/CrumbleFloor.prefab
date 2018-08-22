@@ -182,6 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e11178d8f1ea404e80ca027680de185, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shakeAmplitude: 0.2
-  shakeFreq: 15
+  shakeAmplitude: 0.1
+  shakeFreq: 5
   shakeDuration: 0.5

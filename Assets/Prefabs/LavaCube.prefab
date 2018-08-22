@@ -112,4 +112,4 @@ MonoBehaviour:
   WaveLength: 1000
   WaveHeight: 0.1
   WaveSpeed: 100
-  movement: {x: 0.2, y: 0.1}
+  movement: {x: 0.1, y: 0.05}
