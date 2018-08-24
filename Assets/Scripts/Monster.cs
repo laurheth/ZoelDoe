@@ -5,7 +5,7 @@ using UnityEngine;
 public class Monster : MonoBehaviour {
     protected GameObject playerobj;
     Player player;
-    Rigidbody playerrb;
+    protected Rigidbody playerrb;
     protected Transform playerShield;
     protected float playerShieldRelHeight;
     public int hp;
