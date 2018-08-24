@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 54542378482641800}
   m_Layer: 10
   m_Name: HeliCannon
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -280,6 +280,7 @@ MonoBehaviour:
   hp: 2
   damage: 1
   awakedistsqr: 9
+  trackid: 0
   gunrotatespeed: 10
   offset: {x: 0, y: 3, z: 0}
   GraceDist: 0.5

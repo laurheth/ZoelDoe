@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212948909106730818}
   - component: {fileID: 135518996034997574}
   - component: {fileID: 54528732916615446}
+  - component: {fileID: 114761712111939846}
   m_Layer: 10
   m_Name: HeliBullet
   m_TagString: Untagged
@@ -57,6 +58,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
+--- !u!114 &114761712111939846
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1508188061190350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 006da77f38dea4b6886cbced9dca0050, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
 --- !u!135 &135518996034997574
 SphereCollider:
   m_ObjectHideFlags: 1

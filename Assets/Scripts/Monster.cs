@@ -18,7 +18,7 @@ public class Monster : MonoBehaviour {
     //public float speed;
     public float awakedistsqr;
     protected bool awakened;
-    int trackid;
+    public int trackid;
     protected Rigidbody rb;
 	// Use this for initialization
 	public virtual void Start () {
